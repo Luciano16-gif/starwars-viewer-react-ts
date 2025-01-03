@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .star-bg {
-    background-color: #000; /* Deep space black */
+    background-color: #000; 
     background-image:
       radial-gradient(white 1px, transparent 1px),
       radial-gradient(white 1px, transparent 1px);
     background-repeat: repeat, repeat;
-    background-size: 50px 50px;  /* adjust to taste */
+    background-size: 50px 50px;  
     background-position: 0 0, 25px 25px;
   }
