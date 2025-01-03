@@ -68,7 +68,7 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields }) => {
     <div className="relative">
       <StarryBackground />
       <div className="grid grid-cols-1 justify-items-center bg-[#181818] min-h-screen p-4 text-white">
-        <div className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 rounded hover:bg-[rgba(95,96,96,0.5)] hover:cursor-pointer">
+        <div className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 rounded">
           {properties.name && (
             <h2 className="text-2xl font-bold text-yellow-400">{properties.name}</h2>
           )}
