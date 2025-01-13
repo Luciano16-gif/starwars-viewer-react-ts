@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.star-bg {
-    background-color: #000; /* Deep space black */
-    background-image:
-      radial-gradient(white 1px, transparent 1px),
-      radial-gradient(white 1px, transparent 1px);
-    background-repeat: repeat, repeat;
-    background-size: 50px 50px;  /* adjust to taste */
-    background-position: 0 0, 25px 25px;
+  html, body {
+    @apply font-starwars;
   }

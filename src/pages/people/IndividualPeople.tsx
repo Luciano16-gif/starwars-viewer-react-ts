@@ -5,12 +5,14 @@ const IndividualPeople: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
     const individualPeopleField = [
+        { label: "Birth Year", key: "birth_year" },
+        { label: "Eye color", key: "eye_color" },
+        { label: "Gender", key: "gender" },
+        { label: "Hair color", key: "hair_color" },
         { label: "Height (cm)", key: "height" },
         { label: "Mass (kg)", key: "mass" },
-        { label: "Hair color", key: "hair_color" },
         { label: "Skin color", key: "skin_color" },
-        { label: "Eye color", key: "eye_color" },
-        { label: "Homeworld", key: "homeworld" },
+        { label: "Homeworld", key: "homeworld" },    
     ];
 
 
@@ -18,6 +20,7 @@ const IndividualPeople: React.FC = () => {
         <ShowOne 
             url={`http://www.swapi.tech/api/people/${id}`}
             fields={individualPeopleField}
+            goBack="people"
         />  
     )
 }

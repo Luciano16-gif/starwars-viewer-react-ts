@@ -3,8 +3,12 @@ import ReactDOM from 'react-dom/client';
 
 import './index.css';
 
+import Home from './pages/Home';
+
 import People from './pages/people/People';
 import IndividualPeople from './pages/people/IndividualPeople';
+
+import Films from './pages/films/Films';
 
 import Planets from './pages/Planets/Planets';
 
@@ -18,8 +22,12 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<People/>}  />
-        <Route path="/:id" element={<IndividualPeople/>}  />
+        <Route path="/" element={<Home/>}  />
+
+        <Route path="/people" element={<People/>}  />
+        <Route path="/people/:id" element={<IndividualPeople/>}  />
+
+        <Route path="/Films" element={<Films/>}  />
 
         <Route path="/Planets" element={<Planets/>}  />
       </Routes>

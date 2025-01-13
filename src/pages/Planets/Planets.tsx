@@ -7,14 +7,14 @@ const Planets: React.FC = () => {
     { label: "Diameter", key: "diameter" },
     { label: "Climate", key: "climate" },
     { label: "Gravity", key: "gravity" },
-    { label: "Terrain", key: "terrain" },
-
+    //Only 5 elements so all can be shown at the same time without barely any scrolling
   ];
 
   return (
     <ShowAll 
-      url="https://swapi.dev/api/planets/" 
+      url="https://www.swapi.tech/api/planets/" 
       fields={planetFields} 
+      category={"planets"}
     />
   );
 };

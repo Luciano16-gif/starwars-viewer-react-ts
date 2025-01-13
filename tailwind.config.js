@@ -13,7 +13,10 @@ module.exports = {
       },
       animation: {
         twinkle: 'twinkle 3s ease-in-out infinite',
-      }
+      },
+      fontFamily: {
+        starwars: ['Star Jedi', 'sans-serif'],
+      },
     },
   },
   plugins: [],
