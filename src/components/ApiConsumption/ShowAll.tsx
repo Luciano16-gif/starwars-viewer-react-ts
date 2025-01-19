@@ -9,8 +9,8 @@ interface Field {
 }
 
 interface ShowAllProps {
-  url: string;       
-  fields: Field[];   
+  url: string;
+  fields: Field[];
   category: String;
 }
 
@@ -18,7 +18,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   const { data, loading, error } = useFetch(url);
 
   const [details, setDetails] = useState<Record<string, Record<string, any>>>({});
-  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [loadingDetails, setLoadingDetails] = useState(true);
 
   // Use useMemo so we only recompute `results` when `data` changes
   const results = useMemo(() => {
@@ -27,8 +27,6 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
 
   useEffect(() => {
     if (!results.length) return;
-
-    setLoadingDetails(true);
 
     const fetchAllDetails = async () => {
       try {
@@ -49,17 +47,15 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
         });
 
         setDetails(detailsMap);
+        setLoadingDetails(false);
       } catch (err) {
         console.error("Error fetching object details:", err);
-      } finally {
         setLoadingDetails(false);
       }
     };
 
     fetchAllDetails();
   }, [results]);
-
-  console.log(details);
 
   if (loadingDetails || loading) {
     return (
@@ -82,7 +78,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
       </div>
     );
   }
-  
+
   return (
     <div className="relative">
       <StarryBackground />

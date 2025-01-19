@@ -65,6 +65,10 @@ const HamburgerMenu: React.FC = () => {
           </span>
               
         </button>
+        <h2 className="text-2xl font-bold text-yellow-400 absolute left-1/2 transform -translate-x-1/2">
+          Star Wars
+        </h2>
+        
       </div>
       
       
