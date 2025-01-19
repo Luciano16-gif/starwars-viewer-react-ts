@@ -1,41 +1,42 @@
 import { Link } from "react-router-dom";
 
 const TopMenu: React.FC = () => {
+
+  interface MenuItem {
+    href: string;
+    label: string;
+  }
+
+  const menuItems: MenuItem[] = [
+    { href: "/", label: "Home" },
+    { href: "/people", label: "People" },
+    { href: "/planets", label: "Planets" },
+    { href: "/films", label: "Films" },
+    { href: "/starships", label: "Starships" },
+    { href: "/vehicles", label: "Vehicles" },
+    { href: "/species", label: "Species" },
+  ];
+
   return (
     <nav 
       className="
+        hidden
         bg-black 
         border-b-4 border-yellow-500 
         text-yellow-400 
         p-4 
-        flex 
+        md:flex 
         justify-center 
         items-center
         shadow-lg
       "
     >
-      <ul className="flex flex-row space-x-6 uppercase font-semibold tracking-wider">
-      <li className="hover:scale-110 transform transition-all duration-300">
-          <Link to="/">Home</Link>
-        </li>
-        <li className="hover:scale-110 transform transition-all duration-300">
-          <Link to="/people">People</Link>
-        </li>
-        <li className="hover:scale-110 transform transition-all duration-300">
-          <Link to="/planets">Planets</Link>
-        </li>
-        <li className="hover:scale-110 transform transition-all duration-300">
-          <Link to="/films">Films</Link>
-        </li>
-        <li className="hover:scale-110 transform transition-all duration-300">
-          <Link to="/starships">Starships</Link>
-        </li>
-        <li className="hover:scale-110 transform transition-all duration-300">
-          <Link to="/vehicles">Vehicles</Link>
-        </li>
-        <li className="hover:scale-110 transform transition-all duration-300">
-          <Link to="/species">Species</Link>
-        </li>
+      <ul className="flex flex-row space-x-6 uppercase font-semibold tracking-wider sm:space-x-8 sm:text-lg">
+            {menuItems.map((item) => (
+            <li key={item.href} className="hover:scale-110 transform transition-all duration-300">
+                <Link to={item.href}>{item.label}</Link>
+            </li>
+            ))}
       </ul>
     </nav>
   );

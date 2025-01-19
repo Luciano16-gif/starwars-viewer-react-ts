@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import StarryBackground from "../customStyles/StarryBackground";
-import TopMenu from "../menus/topMenu";
 
 interface Field {
   label: string;
@@ -77,7 +76,6 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
     return (
       <div className="relative">
         <StarryBackground />
-        <TopMenu />
         <h1 className="text-4xl bg-[#181818] min-h-screen min-w-screen text-yellow-400 font-bold flex items-center justify-center">
           Error: {error}
         </h1>
@@ -88,7 +86,6 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   return (
     <div className="relative">
       <StarryBackground />
-      <TopMenu />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center bg-[#181818] min-h-screen p-4 text-white">
         {results.map((object: any) => {
           const objectDetails = details[object.uid] || {};

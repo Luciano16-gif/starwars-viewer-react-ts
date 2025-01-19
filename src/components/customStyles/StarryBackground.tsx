@@ -17,7 +17,7 @@ const StarryBackground = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none min-h-screen">
       {stars.map((star) => (
         <div
           key={star.id}

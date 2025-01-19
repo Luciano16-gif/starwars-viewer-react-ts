@@ -12,6 +12,8 @@ import Films from './pages/films/Films';
 
 import Planets from './pages/Planets/Planets';
 
+import TopMenu from './components/menus/TopMenu';
+import HamburgerMenu from './components/menus/HamburgerMenu';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -21,6 +23,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+      <TopMenu/>
+      <HamburgerMenu/>
       <Routes>
         <Route path="/" element={<Home/>}  />
 
