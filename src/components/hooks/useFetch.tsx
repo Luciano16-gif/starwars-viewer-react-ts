@@ -36,7 +36,6 @@ const useFetch = <T,>(url: string | null): FetchState<T> => {
                 setError(err.message || 'Unknown Error');
             });
     }, [url]);
-
     return { data, loading, error };
 };
 

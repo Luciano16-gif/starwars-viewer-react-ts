@@ -11,6 +11,7 @@ import IndividualPeople from './pages/people/IndividualPeople';
 import Films from './pages/films/Films';
 
 import Planets from './pages/Planets/Planets';
+import IndividualPlanets from './pages/Planets/IndividualPlanets';
 
 import TopMenu from './components/menus/TopMenu';
 import HamburgerMenu from './components/menus/HamburgerMenu';
@@ -21,7 +22,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <BrowserRouter>
       <TopMenu/>
       <HamburgerMenu/>
@@ -34,9 +35,10 @@ root.render(
         <Route path="/Films" element={<Films/>}  />
 
         <Route path="/Planets" element={<Planets/>}  />
+        <Route path="/Planets/:id" element={<IndividualPlanets/>}/>
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>
+  //</React.StrictMode>
 );
 
 
