@@ -32,26 +32,26 @@ const HamburgerMenu: React.FC = () => {
       <div className="absolute top-0 left-0 right-0 border-b-2 border-yellow-500 h-16 flex items-center px-4 z-50">
         <div className="relative w-10 h-10">
           <button
-            className={`w-full h-full flex flex-col items-center justify-center gap-[8px] transition-all duration-300 ease-in-out ${
-              isOpen ? 'scale-90' : 'scale-100'
+            className={`w-full h-full flex flex-col items-center justify-center gap-[8px] transition-all duration-500 ease-in-out ${
+              isOpen ? 'scale-90 rotate-180' : 'scale-100 rotate-0'
             }`}
             onClick={toggleMenu}
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >
             <div
-              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-300 ease-in-out origin-center
+              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-500 ease-in-out origin-center
                 ${isOpen 
                   ? 'w-8 rotate-45 translate-y-0' 
                   : 'w-6 rotate-0 -translate-y-3'}`}
             />
             <div
-              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-300 ease-in-out w-8
+              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-800 ease-in-out w-8
                 ${isOpen 
                   ? 'opacity-0 scale-x-0' 
                   : 'opacity-100 scale-x-100'}`}
             />
             <div
-              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-300 ease-in-out origin-center
+              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-500 ease-in-out origin-center
                 ${isOpen 
                   ? 'w-8 -rotate-45 translate-y-0' 
                   : 'w-6 rotate-0 translate-y-3'}`}
