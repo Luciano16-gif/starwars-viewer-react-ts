@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const HamburgerMenu: React.FC = () => {
-
   const [isOpen, setIsOpen] = useState(false);
 
   interface MenuItem {
@@ -29,75 +28,69 @@ const HamburgerMenu: React.FC = () => {
   }
 
   return (
-    <nav 
-      className="
-        relative 
-        md:hidden 
-        lg:hidden
-      "
-    >
+    <nav className="relative md:hidden lg:hidden">
       <div className="absolute top-0 left-0 right-0 border-b-2 border-yellow-500 h-16 flex items-center px-4 z-50">
-        <button 
-          className="text-yellow-400 hover:text-yellow-300 transition-colors duration-200 text-3xl" 
-          onClick={() => toggleMenu()}
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-        >
-          <span
-            className={`
-              absolute
-              top-3
-              transform transition-all duration-300
-              ${isOpen ? "opacity-0 -translate-y-full" : "opacity-100 translate-y-0"}
-            `}
+        <div className="relative w-10 h-10">
+          <button
+            className={`w-full h-full flex flex-col items-center justify-center gap-[8px] transition-all duration-300 ease-in-out ${
+              isOpen ? 'scale-90' : 'scale-100'
+            }`}
+            onClick={toggleMenu}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
           >
-            ☰
-          </span>
-
-          <span
-            className={`
-              absolute
-              top-3
-              transform transition-all duration-300
-              ${!isOpen ? "opacity-0 -translate-y-full" : "opacity-100 translate-y-0"}
-            `}
-          >
-            X
-          </span>
-              
-        </button>
+            <div
+              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-300 ease-in-out origin-center
+                ${isOpen 
+                  ? 'w-8 rotate-45 translate-y-0' 
+                  : 'w-6 rotate-0 -translate-y-3'}`}
+            />
+            <div
+              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-300 ease-in-out w-8
+                ${isOpen 
+                  ? 'opacity-0 scale-x-0' 
+                  : 'opacity-100 scale-x-100'}`}
+            />
+            <div
+              className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-300 ease-in-out origin-center
+                ${isOpen 
+                  ? 'w-8 -rotate-45 translate-y-0' 
+                  : 'w-6 rotate-0 translate-y-3'}`}
+            />
+          </button>
+        </div>
+        
         <h2 className="text-2xl font-bold text-yellow-400 absolute left-1/2 transform -translate-x-1/2">
           Star Wars
         </h2>
-        
       </div>
-      
-      
       <div
-        className={`fixed inset-0 bg-black/95 transition-opacity duration-300 z-40 ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 bg-black/95 transition-all duration-300 ease-in-out z-40 ${
+          isOpen 
+            ? "opacity-100 scale-100" 
+            : "opacity-0 scale-95 pointer-events-none"
         }`}
         onClick={handleLinkClick}
       >
         <ul className="flex flex-col items-center justify-center h-screen pt-16">
-            {menuItems.map((item, index) => (
-              <li key={item.href} className="hover:scale-110 transform transition-all duration-300">
-                <Link 
-                  className="text-yellow-400 hover:text-yellow-300 text-xl uppercase tracking-wider font-semibold py-4 px-4 w-full inline-block
-                            transform transition-all duration-300 hover:scale-110
+          {menuItems.map((item, index) => (
+            <li key={item.href} className="hover:scale-110 transform transition-all duration-300">
+              <Link
+                className="text-yellow-400 hover:text-yellow-300 text-xl uppercase tracking-wider font-semibold py-4 px-4 w-full inline-block
+                          transform transition-all duration-300 hover:scale-110
                           hover:bg-yellow-500/10"
-                  to={item.href}>
-                    {item.label}
-                </Link>
-                {index < menuItems.length - 1 && (
-                  <div className="w-24 h-px bg-yellow-500/30 mx-auto" />
-                )}
-              </li>  
-            ))}
-        </ul> 
-      </div>       
-      <div className="bg-black h-16 md:hidden lg:hidden" /> {/* Add a div to push the content below the navigation, 
-                                                                otherwise it will be on top of the content */}
-    </nav>   
+                to={item.href}
+              >
+                {item.label}
+              </Link>
+              {index < menuItems.length - 1 && (
+                <div className="w-24 h-px bg-yellow-500/30 mx-auto" />
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="bg-black h-16 md:hidden lg:hidden" />
+    </nav>
   );
 };
 
