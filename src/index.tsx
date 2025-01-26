@@ -8,10 +8,13 @@ import Home from './pages/Home';
 import People from './pages/people/People';
 import IndividualPeople from './pages/people/IndividualPeople';
 
-import Films from './pages/films/Films';
-
 import Planets from './pages/Planets/Planets';
 import IndividualPlanets from './pages/Planets/IndividualPlanets';
+
+import Films from './pages/films/Films';
+
+import Starships from './pages/starships/Starships';
+import IndividualStarhips from './pages/starships/IndividualStarships';
 
 import TopMenu from './components/menus/TopMenu';
 import HamburgerMenu from './components/menus/HamburgerMenu';
@@ -32,10 +35,13 @@ root.render(
         <Route path="/people" element={<People/>}  />
         <Route path="/people/:id" element={<IndividualPeople/>}  />
 
-        <Route path="/Films" element={<Films/>}  />
-
         <Route path="/Planets" element={<Planets/>}  />
         <Route path="/Planets/:id" element={<IndividualPlanets/>}/>
+        
+        <Route path="/Films" element={<Films/>}  />
+
+        <Route path="/Starships" element={<Starships/>}  />
+        <Route path="/Starships/:id" element={<IndividualStarhips/>}/>
       </Routes>
     </BrowserRouter>
   //</React.StrictMode>

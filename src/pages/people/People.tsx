@@ -12,7 +12,7 @@ const People: React.FC = () => {
 
     return (
         <ShowAll 
-            url="http://www.swapi.tech/api/people/" 
+            url="https://www.swapi.tech/api/people?page=1&limit=100" 
             fields={peopleFields} 
             category="people"
         />
