@@ -18,7 +18,7 @@ const IndividualPeople: React.FC = () => {
 
     return (
         <ShowOne 
-            url={`http://www.swapi.tech/api/people/${id}`}
+            url={`https://www.swapi.tech/api/people/${id}`}
             fields={individualPeopleField}
             goBack="people"
         />  

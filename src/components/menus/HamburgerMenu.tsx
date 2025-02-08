@@ -28,7 +28,7 @@ const HamburgerMenu: React.FC = () => {
   }
 
   return (
-    <nav className="relative md:hidden lg:hidden">
+    <nav className="fixed top-0 left-0 right-0 z-40 md:hidden lg:hidden">
       <div className="absolute top-0 left-0 right-0 border-b-2 border-yellow-500 h-16 flex items-center px-4 z-50">
         <div className="relative w-10 h-10">
 
@@ -43,7 +43,7 @@ const HamburgerMenu: React.FC = () => {
             {/* Top line */}
             <div
               className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-400 ease-in-out origin-center
-                ${isOpen ? "w-8 rotate-45 translate-y-0" : "w-8 -translate-y-3 rotate-0"}`}
+                ${isOpen ? "w-10 rotate-45 translate-y-0" : "w-8 -translate-y-3 rotate-0"}`}
             />
             {/* Middle line */}
             <div
@@ -53,7 +53,7 @@ const HamburgerMenu: React.FC = () => {
             {/* Bottom line */}
             <div
               className={`absolute h-[5px] bg-yellow-400 rounded-full transition-all duration-400 ease-in-out origin-center
-                ${isOpen ? "w-8 -rotate-45 translate-y-0" : "w-8 translate-y-3 rotate-0"}`}
+                ${isOpen ? "w-10 -rotate-45 translate-y-0" : "w-8 translate-y-3 rotate-0"}`}
             />
           </button>
         </div>

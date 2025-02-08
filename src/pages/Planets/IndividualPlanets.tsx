@@ -18,7 +18,7 @@ const IndividualPlanets: React.FC = () => {
 
     return (
         <ShowOne
-            url={`http://www.swapi.tech/api/planets/${id}`}
+            url={`https://www.swapi.tech/api/planets/${id}`}
             fields={individualPlanetsField}
             goBack="Planets"
         />

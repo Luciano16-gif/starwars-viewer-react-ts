@@ -22,4 +22,4 @@ SWAPI (Star Wars API)
 The project includes reusable components for API consumption:
 
 ShowAll: A generic component for displaying lists of items from an API
-ShowOne: A component for displaying detailed information about a single item (though this one is not yet ready)
+ShowOne: A component for displaying detailed information about a single item (though this one is not yet ready) 

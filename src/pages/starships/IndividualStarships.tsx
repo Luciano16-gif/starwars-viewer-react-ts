@@ -22,7 +22,7 @@ const IndividualStarships: React.FC = () => {
 
     return (
         <ShowOne
-            url={`http://www.swapi.tech/api/Starships/${id}`}
+            url={`https://www.swapi.tech/api/Starships/${id}`}
             fields={individualStarshipsField}
             goBack="Starships"
         />

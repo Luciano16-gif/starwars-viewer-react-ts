@@ -29,6 +29,11 @@ const TopMenu: React.FC = () => {
         justify-center 
         items-center
         shadow-lg
+        fixed 
+        top-0
+        left-0
+        right-0
+        z-40
       "
     >
       <ul className="flex flex-row space-x-6 uppercase font-semibold tracking-wider sm:space-x-8 sm:text-lg">
