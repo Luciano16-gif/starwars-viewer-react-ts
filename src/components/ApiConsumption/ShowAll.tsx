@@ -1,7 +1,9 @@
+// src/components/ApiConsumption/ShowAll.tsx
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import StarryBackground from "../customStyles/StarryBackground";
+import LimitSelector from "./LimitSelector"; // Adjust the path if needed
 
 interface Field {
   label: string;
@@ -9,18 +11,33 @@ interface Field {
 }
 
 interface ShowAllProps {
-  url: string;
+  url: string; // base URL without a limit parameter
   fields: Field[];
-  category: String;
+  category: string;
 }
 
 const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
-  const { data, loading, error } = useFetch(url);
+  // Manage the limit inside ShowAll (default is 100)
+  const [limit, setLimit] = useState(100);
+
+  // Build the effective URL by removing any existing 'limit' parameter and appending the current one.
+  let effectiveUrl = url;
+  try {
+    const urlObj = new URL(url);
+    urlObj.searchParams.delete("limit");
+    urlObj.searchParams.append("limit", String(limit));
+    effectiveUrl = urlObj.toString();
+  } catch (err) {
+    console.error("Invalid URL:", url);
+  }
+
+  // Fetch the main list using the effective URL
+  const { data, loading, error } = useFetch(effectiveUrl);
 
   const [details, setDetails] = useState<Record<string, Record<string, any>>>({});
   const [loadingDetails, setLoadingDetails] = useState(true);
 
-  // Use useMemo so we only recompute `results` when `data` changes
+  // Recompute results only when data changes
   const results = useMemo(() => {
     return (data as any)?.results || [];
   }, [data]);
@@ -57,7 +74,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
     fetchAllDetails();
   }, [results]);
 
-  if (loadingDetails || loading) {
+  if (loading || loadingDetails) {
     return (
       <div className="relative">
         <StarryBackground />
@@ -80,12 +97,16 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   }
 
   return (
-    <div className="relative">
+    // The outer div has the same dark background to prevent white gaps.
+    <div className="relative bg-[#181818] min-h-screen">
       <StarryBackground />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center bg-[#181818] min-h-screen p-4 text-white">
+      {/* Limit selector placed at the top with matching background */}
+      <div className="bg-[#181818]">
+        <LimitSelector value={limit} onChange={setLimit} />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center p-4 text-white">
         {results.map((object: any) => {
           const objectDetails = details[object.uid] || {};
-
           return (
             <Link
               to={`/${category}/${object.uid}`}
@@ -95,7 +116,6 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
               <h2 className="text-2xl font-bold text-yellow-400">
                 {object.name ?? object.title ?? "Unknown"}
               </h2>
-
               {fields.map(({ label, key }) => (
                 <p className="text-lg font-bold" key={key}>
                   {label}: <span className="font-normal">{objectDetails[key] ?? "N/A"}</span>
