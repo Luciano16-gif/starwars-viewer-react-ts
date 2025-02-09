@@ -11,25 +11,17 @@ interface Field {
 }
 
 interface ShowAllProps {
-  url: string; // base URL without a limit parameter
+  url: string; 
   fields: Field[];
   category: string;
 }
 
 const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
-  // Manage the limit inside ShowAll (default is 100)
-  const [limit, setLimit] = useState(100);
+  // Manage the limit 
+  const [limit, setLimit] = useState(10);
 
-  // Build the effective URL by removing any existing 'limit' parameter and appending the current one.
-  let effectiveUrl = url;
-  try {
-    const urlObj = new URL(url);
-    urlObj.searchParams.delete("limit");
-    urlObj.searchParams.append("limit", String(limit));
-    effectiveUrl = urlObj.toString();
-  } catch (err) {
-    console.error("Invalid URL:", url);
-  }
+  // Appends the limit parameter.
+  const effectiveUrl = `${url}&limit=${limit}`;
 
   // Fetch the main list using the effective URL
   const { data, loading, error } = useFetch(effectiveUrl);
@@ -38,9 +30,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   const [loadingDetails, setLoadingDetails] = useState(true);
 
   // Recompute results only when data changes
-  const results = useMemo(() => {
-    return (data as any)?.results || [];
-  }, [data]);
+  const results = useMemo(() => (data as any)?.results || [], [data]);
 
   useEffect(() => {
     if (!results.length) return;
@@ -97,10 +87,9 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   }
 
   return (
-    // The outer div has the same dark background to prevent white gaps.
     <div className="relative bg-[#181818] min-h-screen">
       <StarryBackground />
-      {/* Limit selector placed at the top with matching background */}
+      {/* Limit selector */}
       <div className="bg-[#181818]">
         <LimitSelector value={limit} onChange={setLimit} />
       </div>

@@ -12,7 +12,7 @@ const Starships: React.FC = () => {
 
   return (
     <ShowAll 
-      url="https://www.swapi.tech/api/starships?page=2&limit=100" 
+      url="https://www.swapi.tech/api/starships?page=1" 
       fields={starshipFields} 
       category={"starships"}
     />

@@ -12,7 +12,7 @@ const Planets: React.FC = () => {
 
   return (
     <ShowAll 
-      url="https://www.swapi.tech/api/planets?page=1&limit=100" 
+      url="https://www.swapi.tech/api/planets?page=1" 
       fields={planetFields} 
       category={"planets"}
     />

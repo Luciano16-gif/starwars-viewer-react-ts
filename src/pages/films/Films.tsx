@@ -8,7 +8,7 @@ const Films: React.FC = () => {
 
     return (
         <ShowAll 
-            url="https://swapi.tech/api/films/" 
+            url="https://swapi.tech/api/films?page=1" 
             fields={filmsFields} 
             category={"films"}
         />
