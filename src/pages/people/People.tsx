@@ -9,7 +9,6 @@ const People: React.FC = () => {
     { label: "Height (cm)", key: "height" },
   ];
 
-  // Provide a base URL without a limit (ShowAll adds it)
   return (
     <ShowAll 
       url="https://www.swapi.tech/api/people?page=1"

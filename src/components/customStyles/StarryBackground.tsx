@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 const StarryBackground = () => {
   // Generate random stars - memoized to prevent re-rendering
   const stars = useMemo(() => {
-    const starCount = 200; 
+    const isMobile = window.innerWidth < 768;
+    const starCount = isMobile ? 50 : 200; 
     return Array.from({ length: starCount }, (_, i) => {
       return {
         id: i,
@@ -17,7 +18,7 @@ const StarryBackground = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none min-h-screen z-90">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none min-h-screen z-[99]">
       {stars.map((star) => (
         <div
           key={star.id}

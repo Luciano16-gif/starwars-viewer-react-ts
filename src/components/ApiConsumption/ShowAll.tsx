@@ -1,9 +1,7 @@
-// src/components/ApiConsumption/ShowAll.tsx
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
-import StarryBackground from "../customStyles/StarryBackground";
-import LimitSelector from "./LimitSelector"; // Adjust the path if needed
+import LimitSelector from "./LimitSelector";
 
 interface Field {
   label: string;
@@ -67,7 +65,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   if (loading || loadingDetails) {
     return (
       <div className="relative">
-        <StarryBackground />
+
         <h1 className="text-4xl min-h-screen bg-[#181818] min-w-screen text-yellow-400 font-bold flex items-center justify-center">
           Loading...
         </h1>
@@ -78,7 +76,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   if (error) {
     return (
       <div className="relative">
-        <StarryBackground />
+
         <h1 className="text-4xl bg-[#181818] min-h-screen min-w-screen text-yellow-400 font-bold flex items-center justify-center">
           Error: {error}
         </h1>
@@ -88,7 +86,6 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
 
   return (
     <div className="relative bg-[#181818] min-h-screen">
-      <StarryBackground />
       {/* Limit selector */}
       <div className="bg-[#181818]">
         <LimitSelector value={limit} onChange={setLimit} />

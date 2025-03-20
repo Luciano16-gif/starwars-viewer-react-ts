@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface LimitSelectorProps {
   value?: number; // Made optional so we can default it
   onChange: (limit: number) => void;
@@ -7,7 +5,7 @@ interface LimitSelectorProps {
 }
 
 const LimitSelector: React.FC<LimitSelectorProps> = ({
-  value = 10, // Default to 10 if no value is provided
+  value = 10, // Default to 10 if no value is provided (just in case)
   onChange,
   options = [10, 20, 50, 100],
 }) => {
