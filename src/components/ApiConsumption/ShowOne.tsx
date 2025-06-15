@@ -1,6 +1,7 @@
 import useFetch from "../../hooks/useFetch";
 import StarryBackground from "../customStyles/StarryBackground";
-import { ArrayField } from "./FetchArray";
+import { ArrayField } from "./ArrayField";
+import { GetName } from "./GetName";
 import { Link } from "react-router-dom";
 
 interface Field {
@@ -21,6 +22,15 @@ interface ApiResponse {
       [key: string]: any;
     };
   };
+}
+
+function isUrl(str: string): boolean {
+  try {
+    new URL(str);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
@@ -67,6 +77,20 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
     );
   }
 
+  const renderFields = (label: string, key: string) => {
+    if (Array.isArray(properties[key])) {
+      return <ArrayField urls={properties[key]} label={label} key={key} />;
+    } else if (isUrl(properties[key])) {
+      return <GetName url={properties[key]} label={label} key={key} />;
+    } else {
+      return (
+        <p className="text-lg font-bold" key={key}>
+          {label}: <span className="font-normal">{properties[key] ?? "N/A"}</span>
+        </p>
+      );
+    }
+  };
+
   return (
     <div className="relative">
       <StarryBackground />
@@ -76,15 +100,7 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
             <h2 className="text-2xl font-bold text-yellow-400">{properties.name}</h2>
           )}
 
-          {fields.map(({ label, key }) => (
-            Array.isArray(properties[key]) ? (
-                <ArrayField urls={properties[key]} label={label} key={key} />
-            ) : (
-              <p className="text-lg font-bold" key={key}>
-                {label}: <span className="font-normal">{properties[key] ?? "N/A"}</span>
-              </p>
-            )
-          ))}
+          {fields.map(({ label, key }) => renderFields(label, key))}
           <p className="text-lg font-bold text-yellow-400 hover:scale-110 transform transition-all duration-300" >
                  <Link to={`/${goBack}`}>Return to {goBack}</Link>
               </p>

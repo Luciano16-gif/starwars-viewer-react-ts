@@ -1,17 +1,36 @@
 import useFetch from "../../hooks/useFetch";
-interface ShowName {
+import { ApiObject } from "../../types/api";
+
+interface GetNameProp {
     url: string;
-  }
-
-const GetName: React.FC<ShowName> = ({ url }) => {
-    const { data, loading, error } = useFetch(url);
-
-    if (loading) return( <h2 className="text-2xl font-bold">Loading</h2> );
-    if (error) return( <h2 className="text-2xl font-bold">Error: {error}</h2> );
-
-    const results = (data as any)?.results || [];
-
-    return (results.name || 'Unknown');
+    label: string;
 }
 
-export default GetName;
+export const GetName: React.FC<GetNameProp> = ({ url, label }) => {
+    const { data, loading, error } = useFetch(url)
+    const name: string = (data as ApiObject)?.result?.properties?.name;
+
+    if (loading) return (
+    <p className="text-lg font-bold">
+      {label}: <span className="font-normal">Loading name...</span>
+    </p>
+  );
+  
+  if (error) return (
+    <p className="text-lg font-bold">
+      {label}: <span className="font-normal">Error loading name</span>
+    </p>
+  );
+
+  if (!name) return (
+    <p className="text-lg font-bold">
+      {label}: <span className="font-normal">N/A</span>
+    </p>
+  );
+
+  return (
+    <p className="text-lg font-bold">
+      {label}: <span className="font-normal">{name}</span>
+    </p>
+  );
+}
