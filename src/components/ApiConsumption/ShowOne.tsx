@@ -1,5 +1,6 @@
-import useFetch from "../hooks/useFetch";
+import useFetch from "../../hooks/useFetch";
 import StarryBackground from "../customStyles/StarryBackground";
+import { ArrayField } from "./FetchArray";
 import { Link } from "react-router-dom";
 
 interface Field {
@@ -76,11 +77,9 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
           )}
 
           {fields.map(({ label, key }) => (
-            /*properties[key]?.startsWith("http") ? (
-              <p className="text-lg font-bold" key={key}>
-                {label}: <span className="font-normal">{properties[key] ?? "N/A"}</span>
-              </p>
-            ) :*/ (
+            Array.isArray(properties[key]) ? (
+                <ArrayField urls={properties[key]} label={label} key={key} />
+            ) : (
               <p className="text-lg font-bold" key={key}>
                 {label}: <span className="font-normal">{properties[key] ?? "N/A"}</span>
               </p>
