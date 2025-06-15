@@ -79,13 +79,13 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
 
   const renderFields = (label: string, key: string) => {
     if (Array.isArray(properties[key])) {
-      return <ArrayField urls={properties[key]} label={label} key={key} />;
+      return <ArrayField urls={properties[key]} label={label} key={key} />; // To show names in an array of urls
     } else if (isUrl(properties[key])) {
-      return <GetName url={properties[key]} label={label} key={key} />;
+      return <GetName url={properties[key]} label={label} key={key} />; // To show name in a single url
     } else {
-      return (
+      return ( // To show any other field
         <p className="text-lg font-bold" key={key}>
-          {label}: <span className="font-normal">{properties[key] ?? "N/A"}</span>
+          {label}: <span className="font-normal">{properties[key] ?? "N/A"}</span> 
         </p>
       );
     }
@@ -96,8 +96,8 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
       <StarryBackground />
       <div className="grid grid-cols-1 justify-items-center bg-[#181818] min-h-screen p-4 text-white">
         <div className="flex flex-col mt-20 items-center outline outline-2 h-fit min-w-[30%] outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 rounded-3xl">
-          {properties.name && (
-            <h2 className="text-2xl font-bold text-yellow-400">{properties.name}</h2>
+          {(properties?.name || properties?.title) && (
+            <h2 className="text-2xl font-bold text-yellow-400">{properties.name || properties.title}</h2>
           )}
 
           {fields.map(({ label, key }) => renderFields(label, key))}

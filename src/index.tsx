@@ -13,6 +13,7 @@ const IndividualPeople = lazy(() => import('./pages/people/IndividualPeople'));
 const Planets = lazy(() => import('./pages/Planets/Planets'));
 const IndividualPlanets = lazy(() => import('./pages/Planets/IndividualPlanets'));
 const Films = lazy(() => import('./pages/films/Films'));
+const IndividualFilm = lazy(() => import('./pages/films/IndividualFilm'));
 const Starships = lazy(() => import('./pages/starships/Starships'));
 const IndividualStarships = lazy(() => import('./pages/starships/IndividualStarships'));
 
@@ -48,6 +49,10 @@ root.render(
             <Films />
         } />
         
+        <Route path="/Films/:id" element={
+            <IndividualFilm />
+        } />
+
         <Route path="/Starships" element={
    
             <Starships />  

@@ -2,13 +2,16 @@ import ShowAll from "../../components/ApiConsumption/ShowAll";
 
 const Films: React.FC = () => {
     const filmsFields = [
+        { label: "Title", key: "title" },
+        { label: "Episode", key: "episode_id" },
         { label: "Director", key: "director" },
-        //Only 5 elements so all can be shown at the same time without scrolling
+        { label: "Producer", key: "producer" },
+        { label: "Release Date", key: "release_date" },
     ];
 
     return (
         <ShowAll 
-            url="https://swapi.tech/api/films?page=1" 
+            url="https://swapi.tech/api/films" 
             fields={filmsFields} 
             category={"films"}
         />

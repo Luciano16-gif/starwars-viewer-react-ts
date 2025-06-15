@@ -18,8 +18,8 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   // Manage the limit 
   const [limit, setLimit] = useState(10);
 
-  // Appends the limit parameter.
-  const effectiveUrl = `${url}&limit=${limit}`;
+  // Appends the limit parameter if URL supports it
+  const effectiveUrl = url.includes('films') ? url : `${url}&limit=${limit}`;
 
   // Fetch the main list using the effective URL
   const { data, loading, error } = useFetch(effectiveUrl);
@@ -28,7 +28,10 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   const [loadingDetails, setLoadingDetails] = useState(true);
 
   // Recompute results only when data changes
-  const results = useMemo(() => (data as any)?.results || [], [data]);
+  const results = useMemo(() => {
+    const apiData = data as any;
+    return apiData?.results || apiData?.result || [];
+  }, [data]);
 
   useEffect(() => {
     if (!results.length) return;
@@ -36,6 +39,15 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
     const fetchAllDetails = async () => {
       try {
         const detailPromises = results.map(async (object: any) => {
+          // For films, properties are already available in the object
+          if (object.properties) {
+            return {
+              uid: object.uid,
+              properties: object.properties,
+            };
+          }
+          
+          // For other endpoints, fetch individual details, this is because otherwise the film page wont work
           const response = await fetch(object.url);
           const json = await response.json();
           return {
@@ -100,7 +112,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
               key={object.uid}
             >
               <h2 className="text-2xl font-bold text-yellow-400">
-                {object.name ?? object.title ?? "Unknown"}
+                {object.name ?? object.properties?.title ?? "Unknown"}
               </h2>
               {fields.map(({ label, key }) => (
                 <p className="text-lg font-bold" key={key}>
