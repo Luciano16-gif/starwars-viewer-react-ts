@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ApiObject } from '../types/api';
+import { ItemResponse, EntityProperties } from '../types/api';
 
 export async function fetchArray(urls: string[], batchSize: number = 5, abortSignal?: AbortSignal): Promise<string[]> {
     const fetchPromises =  
@@ -29,7 +29,17 @@ export async function fetchArray(urls: string[], batchSize: number = 5, abortSig
         const batchPromises = fetchPromises.slice(i, i + batchSize).map(fn => fn());
         const batchResponses = await Promise.all(batchPromises);
 
-        names.push(...batchResponses.filter(Boolean).map((object: ApiObject) => object?.result?.properties?.name).filter(Boolean));
+        names.push(
+          ...batchResponses
+            .filter(Boolean)
+            .map((response: ItemResponse<EntityProperties>) => {
+              const properties = response?.result?.properties;
+              return properties && 'name' in properties ? properties.name : 
+                     properties && 'title' in properties ? (properties as any).title : 
+                     null;
+            })
+            .filter(Boolean)
+        );
     };
     return names;
 }

@@ -1,6 +1,7 @@
 // src/components/ApiConsumption/ListItem.tsx
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { EntityProperties, ItemResponse } from '../../types/api';
 
 interface Field {
   label: string;
@@ -13,17 +14,19 @@ interface ListItemProps {
   url: string;
   fields: Field[];
   category: string;
-  preloadedData?: { properties?: any }; // This is because films are structured different, so its needed to use the preloaded data from showALL
+  preloadedData?: { properties?: EntityProperties }; // This is because films are structured different, so its needed to use the preloaded data from showALL
 }
 
 interface ItemDetails {
-  [key: string]: any;
+  [key: string]: string | string[] | number | undefined;
+  name?: string;
+  title?: string;
 }
 
 
 // Component that fetches 
 const ListItem: React.FC<ListItemProps> = ({ uid, name, url, fields, category, preloadedData }) => {
-  const [itemDetails, setItemDetails] = useState<ItemDetails>(preloadedData?.properties || {});
+  const [itemDetails, setItemDetails] = useState<ItemDetails>((preloadedData?.properties as unknown as ItemDetails) || {});
   const [loading, setLoading] = useState(!preloadedData);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,11 +55,11 @@ const ListItem: React.FC<ListItemProps> = ({ uid, name, url, fields, category, p
           return;
         }
 
-        const data = await response.json();
+        const data: ItemResponse<EntityProperties> = await response.json();
         
         if (!abortController.signal.aborted) {
-          const properties = data.properties || data.result?.properties ||  {};
-          setItemDetails(properties);
+          const properties = data.result?.properties || {};
+          setItemDetails(properties as unknown as ItemDetails);
           setLoading(false);
         } 
       } catch (err) {
