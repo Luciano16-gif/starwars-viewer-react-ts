@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import HamburgerMenu from "../menus/HamburgerMenu";
 import TopMenu from "../menus/TopMenu";
-import StarryBackground from "../customStyles/StarryBackground";
+import StarryBackground from "../ui/StarryBackground";
 
 interface LayoutProps {
   children: React.ReactNode;

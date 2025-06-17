@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import ShowOne from "../../components/ApiConsumption/ShowOne";
 
-const IndividualFilm: React.FC = () => {
+const IndividualFilms: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const filmFields = [
@@ -26,4 +26,4 @@ const IndividualFilm: React.FC = () => {
   );
 };
 
-export default IndividualFilm;
+export default IndividualFilms;
