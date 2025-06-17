@@ -54,7 +54,6 @@ root.render(
         } />
 
         <Route path="/starships" element={
-   
             <Starships />  
         } />
         

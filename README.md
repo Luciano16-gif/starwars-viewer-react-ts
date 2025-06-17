@@ -10,7 +10,7 @@ A comprehensive web application that consumes the SWAPI (Star Wars API) to displ
   - Arrays show as formatted lists with names resolved from URLs
   - Related items display as clickable names instead of raw URLs
   - Efficient batched API calls for array data
-- **Responsive Design**: Works on desktop and mobile (mobile performance score: 78, desktop: 100)
+- **Responsive Design**: Works on desktop and mobile (mobile performance score: 88, desktop: 100)
 - **Limit Selector**: Choose how many items to display (reduces API calls)
 - **Space Theme**: Animated starry background with yellow accent colors
 - **Type Safety**: Full TypeScript implementation with proper API types

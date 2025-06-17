@@ -13,7 +13,7 @@ interface ListItemProps {
   url: string;
   fields: Field[];
   category: string;
-  preloadedData?: any; // This is because films are structured different, so its needed to use the preloaded data from showALL
+  preloadedData?: { properties?: any }; // This is because films are structured different, so its needed to use the preloaded data from showALL
 }
 
 interface ItemDetails {
@@ -23,13 +23,13 @@ interface ItemDetails {
 
 // Component that fetches 
 const ListItem: React.FC<ListItemProps> = ({ uid, name, url, fields, category, preloadedData }) => {
-  const [itemDetails, setItemDetails] = useState<ItemDetails>(preloadedData.properties || {});
+  const [itemDetails, setItemDetails] = useState<ItemDetails>(preloadedData?.properties || {});
   const [loading, setLoading] = useState(!preloadedData);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
 
-    if (preloadedData.properties) {
+    if (preloadedData?.properties) {
       return;
     }
 
