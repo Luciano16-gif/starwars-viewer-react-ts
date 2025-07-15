@@ -22,15 +22,9 @@ export const GetName: React.FC<GetNameProp> = ({ url, label }) => {
     </p>
   );
 
-  if (!name) return (
-    <p className="text-lg font-bold">
-      {label}: <span className="font-normal">N/A</span>
-    </p>
-  );
-
   return (
     <p className="text-lg font-bold">
-      {label}: <span className="font-normal">{name}</span>
+      {label}: <span className="font-normal">{name || "N/A"}</span>
     </p>
   );
-}
+};
