@@ -1,4 +1,5 @@
 import ShowAll from "../../components/ApiConsumption/ShowAll";
+import swapiService from "../../services/swapi.service";
 
 const Films: React.FC = () => {
     const filmsFields = [
@@ -11,7 +12,7 @@ const Films: React.FC = () => {
 
     return (
         <ShowAll 
-            url="https://swapi.tech/api/films" 
+            url={swapiService.getListUrl('films')} 
             fields={filmsFields} 
             category={"films"}
         />

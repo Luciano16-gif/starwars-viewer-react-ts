@@ -19,11 +19,8 @@ const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
   // Manage the limit 
   const [limit, setLimit] = useState(10);
 
-  // Appends the limit parameter if URL supports it
-  const effectiveUrl = url.includes('films') ? url : `${url}&limit=${limit}`;
-
   // Fetch the main list using the effective URL
-  const { data, loading, error } = useFetch<ListResponse>(effectiveUrl);
+  const { data, loading, error } = useFetch<ListResponse>(url);
 
   // Recompute results only when data changes
   const results = useMemo(() => {

@@ -1,5 +1,6 @@
 import ShowOne from "../../components/ApiConsumption/ShowOne";
 import { useParams } from "react-router-dom";
+import swapiService from "../../services/swapi.service";
 
 const IndividualStarships: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -22,9 +23,9 @@ const IndividualStarships: React.FC = () => {
 
     return (
         <ShowOne
-            url={`https://www.swapi.tech/api/Starships/${id}`}
+            url={swapiService.getItemUrl('starships', id!)}
             fields={individualStarshipsField}
-            goBack="Starships"
+            goBack="starships"
         />
     );
 };
