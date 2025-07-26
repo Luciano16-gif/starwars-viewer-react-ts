@@ -1,6 +1,3 @@
-
-
-
 class SWAPIService {
     private readonly baseURL = 'https://www.swapi.tech/api';
 

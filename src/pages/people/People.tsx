@@ -12,7 +12,6 @@ const People: React.FC = () => {
 
   return (
     <ShowAll 
-      url={swapiService.getListUrl('people', 1)}
       fields={peopleFields} 
       category="people"
     />

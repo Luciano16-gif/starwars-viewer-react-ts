@@ -13,7 +13,6 @@ const Starships: React.FC = () => {
 
   return (
     <ShowAll 
-      url={swapiService.getListUrl('starships', 1)} 
       fields={starshipFields} 
       category={"starships"}
     />

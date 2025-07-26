@@ -3,6 +3,7 @@ import useFetch from "../../hooks/useFetch";
 import LimitSelector from "./LimitSelector";
 import ListItem from "./ListItem";
 import { ListResponse, ListItem as ListItemType } from "../../types/api";
+import swapiService from "../../services/swapi.service";
 
 interface Field {
   label: string;
@@ -10,14 +11,15 @@ interface Field {
 }
 
 interface ShowAllProps {
-  url: string; 
   fields: Field[];
   category: string;
 }
 
-const ShowAll: React.FC<ShowAllProps> = ({ url, fields, category }) => {
+const ShowAll: React.FC<ShowAllProps> = ({ fields, category }) => {
   // Manage the limit 
   const [limit, setLimit] = useState(10);
+
+  const url = swapiService.getListUrl(category, 1, limit);
 
   // Fetch the main list using the effective URL
   const { data, loading, error } = useFetch<ListResponse>(url);
