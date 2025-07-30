@@ -1,5 +1,4 @@
 import ShowAll from "../../components/ApiConsumption/ShowAll";
-import swapiService from "../../services/swapi.service";
 
 const People: React.FC = () => {
   const peopleFields = [

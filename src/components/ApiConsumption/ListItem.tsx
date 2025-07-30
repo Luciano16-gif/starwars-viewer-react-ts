@@ -1,7 +1,6 @@
-// src/components/ApiConsumption/ListItem.tsx
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EntityProperties, ItemResponse } from '../../types/api';
+import useFetch from '../../hooks/useFetch';
 
 interface Field {
   label: string;
@@ -26,56 +25,12 @@ interface ItemDetails {
 
 // Component that fetches 
 const ListItem: React.FC<ListItemProps> = ({ uid, name, url, fields, category, preloadedData }) => {
-  const [itemDetails, setItemDetails] = useState<ItemDetails>((preloadedData?.properties as unknown as ItemDetails) || {});
-  const [loading, setLoading] = useState(!preloadedData);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-
-    if (preloadedData?.properties) {
-      return;
-    }
-
-    const abortController = new AbortController(); // I forgot to do this before
-
-    const fetchDetails = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const response = await fetch(url, { 
-          signal: abortController.signal 
-        });
-
-        if (abortController.signal.aborted) return; 
-
-        if (!response.ok) {
-          setError(`Error: ${response.status} ${response.statusText}`);
-          setLoading(false);
-          return;
-        }
-
-        const data: ItemResponse<EntityProperties> = await response.json();
-        
-        if (!abortController.signal.aborted) {
-          const properties = data.result?.properties || {};
-          setItemDetails(properties as unknown as ItemDetails);
-          setLoading(false);
-        } 
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-          setLoading(false);
-        }
-      };
-    };
-
-    fetchDetails();
-
-    return () => {
-      abortController.abort(); // This is to avoid memory leaks (kinda important)
-    };
-  } ,[url, preloadedData]);
+  const shouldFetch = !preloadedData?.properties;
+  const { data, loading, error } = useFetch<ItemResponse<EntityProperties>>(shouldFetch ? url : null);
+  
+  const itemDetails = preloadedData?.properties 
+    ? (preloadedData.properties as unknown as ItemDetails)
+    : (data?.result?.properties as unknown as ItemDetails) || {};
 
   if (loading) {
     return (
