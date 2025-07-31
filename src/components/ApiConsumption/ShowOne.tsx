@@ -25,29 +25,51 @@ function isUrl(str: string): boolean {
 }
 
 const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
-  const { data, loading, error } = useFetch<ItemResponse<EntityProperties>>(url);
+  const { data,  error } = useFetch<ItemResponse<EntityProperties>>(url);
 
-  if (loading) {
+  if (error) {
     return (
       <div className="relative">
-
         <div className="min-h-screen min-w-screen bg-[#181818]">
           <h1 className="text-4xl text-yellow-400 font-bold flex items-center justify-center min-h-screen">
-            Loading...
+            Error: {error}
           </h1>
         </div>
       </div>
     );
   }
 
-  if (error) {
+  if (!data) {
+    // Show skeleton while loading
     return (
-      <div className="relative">
+      <div className="relative bg-[#181818] min-h-screen">
+        {/* Header skeleton */}
+        <div className="bg-[#181818] border-b border-yellow-400/20 sticky top-0 z-10">
+          <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="w-5 h-5 bg-yellow-400/20 rounded mr-2 animate-pulse"></div>
+              <div className="w-24 h-6 bg-yellow-400/20 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
 
-        <div className="min-h-screen min-w-screen bg-[#181818]">
-          <h1 className="text-4xl text-yellow-400 font-bold flex items-center justify-center min-h-screen">
-            Error: {error}
-          </h1>
+        {/* Main content skeleton */}
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          {/* Title skeleton */}
+          <div className="mb-8">
+            <div className="w-64 h-10 bg-yellow-400/20 rounded mb-2 animate-pulse"></div>
+            <div className="h-1 w-20 bg-yellow-400/20 rounded animate-pulse"></div>
+          </div>
+
+          {/* Content grid skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {fields.map((_, index) => (
+              <div key={index} className="bg-[rgba(57,58,58,0.3)] rounded-lg p-6 border-2 border-yellow-400/10">
+                <div className="w-32 h-6 bg-yellow-400/20 rounded mb-3 animate-pulse"></div>
+                <div className="w-full h-6 bg-gray-600/20 rounded animate-pulse"></div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -58,7 +80,6 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
   if (!properties) {
     return (
       <div className="relative">
-
         <div className="min-h-screen min-w-screen bg-[#181818]">
           <h1 className="text-4xl text-yellow-400 font-bold flex items-center justify-center min-h-screen">
             No data found
@@ -67,35 +88,63 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
       </div>
     );
   }
-
-  const renderFields = (label: string, key: string) => {
-    const value = properties ? (properties as any)[key] : null;
-    
-    if (Array.isArray(value)) {
-      return <ArrayField urls={value} label={label} key={key} />; // To show names in an array of urls
-    } else if (typeof value === 'string' && isUrl(value)) {
-      return <GetName url={value} label={label} key={key} />; // To show name in a single url
-    } else {
-      return ( // To show any other field
-        <p className="text-lg font-bold" key={key}>
-          {label}: <span className="font-normal">{value ?? "N/A"}</span> 
-        </p>
-      );
-    }
-  };
-
   return (
-    <div className="relative">
-      <div className="grid grid-cols-1 justify-items-center bg-[#181818] min-h-screen p-4 text-white">
-        <div className="flex flex-col mt-20 items-center outline outline-2 h-fit min-w-[30%] outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 rounded-3xl">
-          {((properties as any)?.name || (properties as any)?.title) && (
-            <h2 className="text-2xl font-bold text-yellow-400">{(properties as any).name || (properties as any).title || "Unknown"}</h2>
-          )}
+    <div className="relative bg-[#181818] min-h-screen">
+      {/* Header with back button */}
+      <div className="bg-[#181818] border-b border-yellow-400/20 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link 
+            to={`/${goBack}`}
+            className="flex items-center text-yellow-400 hover:text-yellow-300 transition-colors duration-200"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to {goBack}
+          </Link>
+        </div>
+      </div>
 
-          {fields.map(({ label, key }) => renderFields(label, key))}
-          <p className="text-lg font-bold text-yellow-400 hover:scale-110 transform transition-all duration-300" >
-                 <Link to={`/${goBack}`}>Return to {goBack}</Link>
-              </p>
+      {/* Main content */}
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        {/* Title section */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-yellow-400 mb-2">
+            {(properties as any)?.name || (properties as any)?.title || "Unknown"}
+          </h1>
+          <div className="h-1 w-20 bg-yellow-400 rounded"></div>
+        </div>
+
+        {/* Content grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-gray-100">
+          {fields.map(({ label, key }) => {
+            const value = properties ? (properties as any)[key] : null;
+            
+            if (Array.isArray(value)) {
+              return (
+                <div key={key} className="lg:col-span-2">
+                  <div className="bg-[rgba(57,58,58,0.3)] rounded-lg p-6 border-2 border-yellow-400/10">
+                    <h3 className="text-xl font-semibold text-yellow-400 mb-4">{label}</h3>
+                    <ArrayField urls={value} label={label} />
+                  </div>
+                </div>
+              );
+            } else if (typeof value === 'string' && isUrl(value)) {
+              return (
+                <div key={key} className="bg-[rgba(57,58,58,0.3)] rounded-lg p-6 border-2 border-yellow-400/10">
+                  <h3 className="text-lg font-semibold text-yellow-400 mb-3">{label}</h3>
+                    <GetName url={value} label={label} />
+                </div>
+              );
+            } else {
+              return (
+                <div key={key} className="bg-[rgba(57,58,58,0.3)] rounded-lg p-6 border-2 border-yellow-400/10">
+                  <h3 className="text-lg font-semibold text-yellow-400 mb-3">{label}</h3>
+                  <p className="text-lg font-medium">{value ?? "N/A"}</p>
+                </div>
+              );
+            }
+          })}
         </div>
       </div>
     </div>

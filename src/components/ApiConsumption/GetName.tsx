@@ -11,20 +11,18 @@ export const GetName: React.FC<GetNameProp> = ({ url, label }) => {
     const name: string = (data as ApiObject)?.result?.properties?.name;
 
     if (loading) return (
-    <p className="text-lg font-bold">
-      {label}: <span className="font-normal">Loading name...</span>
-    </p>
+      <div className="h-6 bg-gray-600/20 rounded animate-pulse w-32"></div>
   );
   
   if (error) return (
     <p className="text-lg font-bold">
-      {label}: <span className="font-normal">Error loading name</span>
+      <span className="font-normal">Error loading name</span>
     </p>
   );
 
   return (
     <p className="text-lg font-bold">
-      {label}: <span className="font-normal">{name || "N/A"}</span>
+      <span className="font-normal">{name || "N/A"}</span>
     </p>
   );
 };

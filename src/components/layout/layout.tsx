@@ -15,12 +15,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     setBgRendered(true);
     
-    // Delay preloader to let page fully load (helps with Lighthouse)
-    setTimeout(() => {
-      dataPreloader().catch(error => {
-        console.error('Failed to preload data:', error);
-      });
-    }, 2000);
+    // Preload API data on app startup
+    dataPreloader().catch(error => {
+      console.error('Failed to preload data:', error);
+    });
   }, []);
   
   return (

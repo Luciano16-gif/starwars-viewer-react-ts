@@ -29,22 +29,9 @@ const ShowAll: React.FC<ShowAllProps> = ({ fields, category }) => {
     return data?.results || data?.result || [];
   }, [data]);
 
-
-  if (loading) {
-    return (
-      <div className="relative">
-
-        <h1 className="text-4xl min-h-screen bg-[#181818] min-w-screen text-yellow-400 font-bold flex items-center justify-center">
-          Loading...
-        </h1>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="relative">
-
         <h1 className="text-4xl bg-[#181818] min-h-screen min-w-screen text-yellow-400 font-bold flex items-center justify-center">
           Error: {error}
         </h1>
@@ -59,19 +46,48 @@ const ShowAll: React.FC<ShowAllProps> = ({ fields, category }) => {
         <LimitSelector value={limit} onChange={setLimit} />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center p-4 text-white">
-        {results.map((object: ListItemType) => {
-          return (
+        {!data ? (
+          // Render skeleton items immediately when no data
+          Array(limit).fill(null).map((_, index) => (
             <ListItem
-              key={object.uid}
-              uid={object.uid}
-              name={object.name || (object.properties as any)?.title}
-              url={object.url}
+              key={`skeleton-${index}`}
+              uid=""
+              name=""
+              url=""
               fields={fields}
               category={category}
-              preloadedData={object}
             />
-          );
-        })}
+          ))
+        ) : (
+          <>
+            {/* Render actual results */}
+            {results.map((object: ListItemType) => (
+              <ListItem
+                key={object.uid}
+                uid={object.uid}
+                name={object.name || (object.properties as any)?.title}
+                url={object.url}
+                fields={fields}
+                category={category}
+                preloadedData={object}
+              />
+            ))}
+            
+            {/* Render skeletons for remaining slots only if loading more data */}
+            {loading && results.length < limit && 
+              Array(limit - results.length).fill(null).map((_, index) => (
+                <ListItem
+                  key={`skeleton-${results.length + index}`}
+                  uid=""
+                  name=""
+                  url=""
+                  fields={fields}
+                  category={category}
+                />
+              ))
+            }
+          </>
+        )}
       </div>
     </div>
   );

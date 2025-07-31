@@ -32,7 +32,7 @@ const ListItem: React.FC<ListItemProps> = ({ uid, name, url, fields, category, p
     ? (preloadedData.properties as unknown as ItemDetails)
     : (data?.result?.properties as unknown as ItemDetails) || {};
 
-  if (loading) {
+  if (loading || (!data && shouldFetch)) {
     return (
       <div className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded animate-pulse">
         {/* Title skeleton */}
@@ -65,7 +65,9 @@ const ListItem: React.FC<ListItemProps> = ({ uid, name, url, fields, category, p
   return (
     <Link
       to={`/${category}/${uid}`}
-      className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded hover:bg-[rgba(95,96,96,0.5)] hover:cursor-pointer transition-all duration-200"
+      className="flex flex-col items-center outline outline-2 outline-yellow-400 
+      bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded hover:bg-[rgba(95,96,96,0.5)] 
+      hover:cursor-pointer transition-all duration-200"
     >
       <h2 className="text-2xl font-bold text-yellow-400">
         {name || itemDetails?.title || "Unknown"}
