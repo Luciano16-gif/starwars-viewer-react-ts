@@ -1,4 +1,3 @@
-// src/hooks/useFetchArray.tsx
 import { useState, useEffect } from 'react';
 import { ItemResponse, EntityProperties } from '../types/api';
 import cacheService from '../services/cache.service';
