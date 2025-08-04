@@ -1,8 +1,10 @@
+import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { ArrayField } from "./ArrayField";
 import { GetName } from "./GetName";
 import { Link } from "react-router-dom";
 import { ItemResponse, EntityProperties } from "../../types/api";
+import { DetailModal } from "./DetailModal";
 
 interface Field {
   label: string;
@@ -26,6 +28,15 @@ function isUrl(str: string): boolean {
 
 const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
   const { data,  error } = useFetch<ItemResponse<EntityProperties>>(url);
+  const [modalUrl, setModalUrl] = useState<string | null>(null);
+
+  const handleDetailClick = (url: string) => {
+    setModalUrl(url);
+  };
+
+  const closeModal = () => {
+    setModalUrl(null);
+  };
 
   if (error) {
     return (
@@ -125,7 +136,7 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
                 <div key={key} className="lg:col-span-2">
                   <div className="bg-[rgba(57,58,58,0.3)] rounded-lg p-6 border-2 border-yellow-400/10">
                     <h3 className="text-xl font-semibold text-yellow-400 mb-4">{label}</h3>
-                    <ArrayField urls={value} label={label} />
+                    <ArrayField urls={value} label={label} onDetailClick={handleDetailClick} />
                   </div>
                 </div>
               );
@@ -133,12 +144,12 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
               return (
                 <div key={key} className="bg-[rgba(57,58,58,0.3)] rounded-lg p-6 border-2 border-yellow-400/10">
                   <h3 className="text-lg font-semibold text-yellow-400 mb-3">{label}</h3>
-                    <GetName url={value} label={label} />
+                    <GetName url={value} label={label} onDetailClick={handleDetailClick} />
                 </div>
               );
             } else {
               return (
-                <div key={key} className="bg-[rgba(57,58,58,0.3)] rounded-lg p-6 border-2 border-yellow-400/10">
+                <div key={key} className="bg-[rgba(57,58,58,0.3)] text-gray-100 rounded-lg p-6 border-2 border-yellow-400/10">
                   <h3 className="text-lg font-semibold text-yellow-400 mb-3">{label}</h3>
                   <p className="text-lg font-medium">{value ?? "N/A"}</p>
                 </div>
@@ -147,6 +158,9 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
           })}
         </div>
       </div>
+
+      {/* Detail Modal */}
+      <DetailModal url={modalUrl} onClose={closeModal} />
     </div>
   );
 };

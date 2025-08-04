@@ -15,7 +15,7 @@ export default async function dataPreloader(): Promise<void> {
             
             // Cache individual items
             const individualFetches = results
-                .filter((object: ListItem) => object.url) // Filter out objects without URLs
+                .filter((object: ListItem) => object.url) // Filter out objects without URLs to avoid warnings due to films
                 .map((object: ListItem) => 
                     fetchAndCache<ItemResponse<EntityProperties>>(object.url).catch(error => {
                         console.warn(`Failed to cache ${object.name}:`, error);
