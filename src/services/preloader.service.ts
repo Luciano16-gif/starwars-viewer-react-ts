@@ -9,21 +9,7 @@ export default async function dataPreloader(): Promise<void> {
         let category: string = categories[i];
         
         try {
-            const data = await fetchAndCache<ListResponse>(swapiService.getListUrl(category, 1, 10));
-
-            const results = data?.results || data?.result || [];
-            
-            // Cache individual items
-            const individualFetches = results
-                .filter((object: ListItem) => object.url) // Filter out objects without URLs to avoid warnings due to films
-                .map((object: ListItem) => 
-                    fetchAndCache<ItemResponse<EntityProperties>>(object.url).catch(error => {
-                        console.warn(`Failed to cache ${object.name}:`, error);
-                        return null;
-                    })
-                );
-            
-            await Promise.all(individualFetches);
+            await fetchAndCache<ListResponse>(swapiService.getListUrl(category, 1, 10));
         } catch (error) {
             console.error(`Failed to preload ${category}:`, error);
         }

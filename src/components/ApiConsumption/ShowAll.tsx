@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useEffect } from "react";
 import { useSearchParams, useLocation, Link } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import LimitSelector from "./LimitSelector";
@@ -17,34 +17,81 @@ interface ShowAllProps {
   category: string;
 }
 
+const SkeletonCard: React.FC<{ fields: Field[] }> = ({ fields }) => (
+  <div className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded animate-pulse">
+    <div className="h-8 bg-yellow-400/20 rounded w-3/4 mb-2"></div>
+    {fields.map((_, fieldIndex) => (
+      <div key={fieldIndex} className="h-5 bg-gray-600/20 rounded w-full mb-1 mt-1"></div>
+    ))}
+  </div>
+);
+
+const ItemCard: React.FC<{ item: ListItemType; fields: Field[]; category: string; search: string }> = ({ 
+  item, 
+  fields, 
+  category, 
+  search 
+}) => (
+  <Link
+    to={`/${category}/${item.uid}${search}`}
+    className="flex flex-col items-center outline outline-2 outline-yellow-400 
+    bg-[rgba(57,58,58,0.5)] p-3 h-48 md:h-56 w-full rounded hover:bg-[rgba(95,96,96,0.5)] 
+    hover:cursor-pointer transition-all duration-200 overflow-hidden"
+  >
+    <h2 className="text-2xl font-bold text-yellow-400 truncate w-full text-center">
+      {item.name || (item as any).title || (item.properties as any)?.name || (item.properties as any)?.title || "Unknown"}
+    </h2>
+    
+    {fields.map(({ label, key }) => (
+      <p className="text-lg font-bold flex items-baseline gap-2 overflow-hidden w-full justify-center py-0.5" key={key}>
+        <span className="whitespace-nowrap">{label}:</span>
+        <span className="font-normal truncate">{(item.properties as any)?.[key] || "N/A"}</span>
+      </p>
+    ))}
+  </Link>
+);
+
 const ShowAll: React.FC<ShowAllProps> = ({ fields, category }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   
-  // Extract parameters from URL
   const limit = parseInt(searchParams.get('limit') || '10');
   const page = parseInt(searchParams.get('page') || '1');
   const q = searchParams.get('q') || '';
   
   const url = swapiService.getListUrl(category, page, limit, q);
-  const pageRef = useRef(page);
-  const isPageTransitionRef = useRef(false);
-  if (pageRef.current !== page) {
-    isPageTransitionRef.current = true;
-    pageRef.current = page;
-  }
-  const keepPreviousData = !isPageTransitionRef.current;
+  
+  const previousQueryRef = useRef(q);
+  const isSearchChange = previousQueryRef.current !== q;
+  
+  // Update the ref after determining if it's a search change
+  useEffect(() => {
+    previousQueryRef.current = q;
+  }, [q]);
+  
+  // Keep previous data only on initial page for non-search states
+  const keepPreviousData = !isSearchChange && page === 1;  
   const { data, loading, error } = useFetch<ListResponse>(url, { keepPreviousData });
 
-  if (!loading && isPageTransitionRef.current) {
-    isPageTransitionRef.current = false;
-  }
   // Recompute results and total pages only when data changes
   const results = useMemo(() => {
     return data?.results || data?.result || [];
   }, [data]);
 
   const totalPages = data?.total_pages || 1;
+
+  // Determine if we should show skeletons instead of results
+  const showSkeletonsInsteadOfResults = loading && keepPreviousData && !!results.length;
+  
+  const skeletonCount = useMemo(() => {
+    if (showSkeletonsInsteadOfResults) {
+      return Math.max(0, limit - results.length); // Show only additional skeletons needed
+    }
+    if (!results.length && loading) {
+      return limit; // Show full skeleton grid for initial load
+    }
+    return 0;
+  }, [loading, keepPreviousData, results.length, limit, showSkeletonsInsteadOfResults]);
 
   if (error) {
     return (
@@ -99,64 +146,27 @@ const ShowAll: React.FC<ShowAllProps> = ({ fields, category }) => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center p-4 text-white">
-        {loading && isPageTransitionRef.current ? (
-          Array(limit).fill(null).map((_, index) => (
-            <div key={`skeleton-${index}`} className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded animate-pulse">
-              <div className="h-8 bg-yellow-400/20 rounded w-3/4 mb-2"></div>
-              {fields.map((_, fieldIndex) => (
-                <div key={fieldIndex} className="h-5 bg-gray-600/20 rounded w-full mb-1 mt-1"></div>
-              ))}
-            </div>
-          ))
-        ) : results.length > 0 ? (
-          <>
-            {/* Show loaded items */}
-            {results.map((object: ListItemType) => (
-              <Link
-                key={object.uid}
-                to={`/${category}/${object.uid}${location.search}`}
-                className="flex flex-col items-center outline outline-2 outline-yellow-400 
-                bg-[rgba(57,58,58,0.5)] p-3 h-48 md:h-56 w-full rounded hover:bg-[rgba(95,96,96,0.5)] 
-                hover:cursor-pointer transition-all duration-200 overflow-hidden"
-              >
-                <h2 className="text-2xl font-bold text-yellow-400 truncate w-full text-center">
-                  {object.name || (object as any).title || (object.properties as any)?.name || (object.properties as any)?.title || "Unknown"}
-                </h2>
-                
-                {fields.map(({ label, key }) => (
-                  <p className="text-lg font-bold flex items-baseline gap-2 overflow-hidden w-full justify-center py-0.5" key={key}>
-                    <span className="whitespace-nowrap">{label}:</span>
-                    <span className="font-normal truncate">{(object.properties as any)?.[key] || "N/A"}</span>
-                  </p>
-                ))}
-              </Link>
-            ))}
-            
-            {/* Show skeletons only for missing slots while loading */}
-            {loading && results.length < limit && 
-              Array(limit - results.length).fill(null).map((_, index) => (
-                <div key={`skeleton-${results.length + index}`} className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded animate-pulse">
-                  <div className="h-8 bg-yellow-400/20 rounded w-3/4 mb-2"></div>
-                  {fields.map((_, fieldIndex) => (
-                    <div key={fieldIndex} className="h-5 bg-gray-600/20 rounded w-full mb-1 mt-1"></div>
-                  ))}
-                </div>
-              ))
-            }
-          </>
-        ) : (
-          q && !loading ? (
-            <div className="col-span-full text-center text-yellow-400 py-8">No results found for "{q}".</div>
-          ) : (
-            Array(limit).fill(null).map((_, index) => (
-              <div key={`skeleton-${index}`} className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded animate-pulse">
-                <div className="h-8 bg-yellow-400/20 rounded w-3/4 mb-2"></div>
-                {fields.map((_, fieldIndex) => (
-                  <div key={fieldIndex} className="h-5 bg-gray-600/20 rounded w-full mb-1 mt-1"></div>
-                ))}
-              </div>
-            ))
-          )
+        {/* Show results if we have them */}
+        {results.map((item: ListItemType) => (
+          <ItemCard 
+            key={item.uid} 
+            item={item} 
+            fields={fields} 
+            category={category} 
+            search={location.search} 
+          />
+        ))}
+        
+        {/* Show skeletons for loading slots */}
+        {Array(skeletonCount).fill(null).map((_, index) => (
+          <SkeletonCard key={`skeleton-${index}`} fields={fields} />
+        ))}
+        
+        {/* Show no results message */}
+        {!loading && !results.length && q && (
+          <div className="col-span-full text-center text-yellow-400 py-8">
+            No results found for "{q}".
+          </div>
         )}
       </div>
       
