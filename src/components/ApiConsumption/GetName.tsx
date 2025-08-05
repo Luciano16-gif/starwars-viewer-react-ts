@@ -8,9 +8,10 @@ interface GetNameProp {
 }
 
 export const GetName: React.FC<GetNameProp> = ({ url, label, onDetailClick }) => {
-    const { data, loading, error } = useFetch(url)
+    const isNullUrl = typeof url === 'string' && /(?:^|\/)null\/?$/.test(url);
+    const safeUrl = isNullUrl ? '' : url;
+    const { data, loading, error } = useFetch(safeUrl);
     const name: string = (data as ApiObject)?.result?.properties?.name;
-
     if (loading) return (
       <div className="h-6 bg-gray-600/20 rounded animate-pulse w-32"></div>
   );
@@ -23,7 +24,7 @@ export const GetName: React.FC<GetNameProp> = ({ url, label, onDetailClick }) =>
 
   return (
     <button 
-      onClick={() => onDetailClick?.(url)}
+      onClick={() => onDetailClick?.(safeUrl)}
       className="text-lg font-bold text-left w-full p-2 rounded border border-yellow-400/20 hover:border-yellow-400 hover:shadow-[0_0_0_1px_rgba(250,204,21,0.3)] hover:bg-yellow-400/5 transition-all duration-200 cursor-pointer"
       disabled={!onDetailClick}
     >

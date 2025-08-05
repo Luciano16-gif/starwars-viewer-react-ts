@@ -16,6 +16,10 @@ const Films = lazy(() => import('./pages/films/Films'));
 const IndividualFilms = lazy(() => import('./pages/films/IndividualFilms'));
 const Starships = lazy(() => import('./pages/starships/Starships'));
 const IndividualStarships = lazy(() => import('./pages/starships/IndividualStarships'));
+const Vehicles = lazy(() => import('./pages/vehicles/Vehicles'));
+const IndividualVehicles = lazy(() => import('./pages/vehicles/IndividualVehicles'));
+const Species = lazy(() => import('./pages/species/Species'));
+const IndividualSpecies = lazy(() => import('./pages/species/IndividualSpecies'));
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -59,6 +63,22 @@ root.render(
         
         <Route path="/starships/:id" element={
             <IndividualStarships /> 
+        } />
+
+        <Route path="/vehicles" element={
+            <Vehicles />  
+        } />
+        
+        <Route path="/vehicles/:id" element={
+            <IndividualVehicles /> 
+        } />
+
+        <Route path="/species" element={
+            <Species />  
+        } />
+        
+        <Route path="/species/:id" element={
+            <IndividualSpecies /> 
         } />
       </Routes>
     </Layout>

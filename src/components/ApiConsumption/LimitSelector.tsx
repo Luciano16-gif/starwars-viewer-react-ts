@@ -14,27 +14,23 @@ const LimitSelector: React.FC<LimitSelectorProps> = ({
   };
 
   return (
-    <div className="pb-2 pt-4 flex items-center justify-center bg-[#181818]">
-      <label htmlFor="limit-selector" className="text-yellow-400 mr-2 text-lg font-bold">
-        Show:
-      </label>
-      <div className="relative inline-block">
+    <div className="flex items-center gap-2 justify-center">
+      <div className="relative inline-block w-28 sm:w-32">
         <select
           id="limit-selector"
           value={value}
           onChange={handleChange}
-          className="appearance-none pr-8 pl-3 py-2 bg-gray-800 text-yellow-400 border border-yellow-400 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-200"
+          className="w-full appearance-none pr-9 pl-3 h-12 sm:h-[52px] bg-[#1f1f1f] text-yellow-300 border border-yellow-400/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/60 transition-all duration-200"
         >
           {options.map((option) => (
-            <option key={option} value={option} className="text-yellow-400">
+            <option key={option} value={option} className="text-yellow-400 bg-[#1f1f1f]">
               {option}
             </option>
           ))}
         </select>
-        {/* Custom dropdown arrow */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-yellow-400">
-          <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
-            <path d="M7 10l5 5 5-5H7z" />
+        <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-yellow-400/70">
+          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" />
           </svg>
         </div>
       </div>

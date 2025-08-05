@@ -2,7 +2,7 @@ import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { ArrayField } from "./ArrayField";
 import { GetName } from "./GetName";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ItemResponse, EntityProperties } from "../../types/api";
 import { DetailModal } from "./DetailModal";
 
@@ -29,6 +29,7 @@ function isUrl(str: string): boolean {
 const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
   const { data,  error } = useFetch<ItemResponse<EntityProperties>>(url);
   const [modalUrl, setModalUrl] = useState<string | null>(null);
+  const location = useLocation();
 
   const handleDetailClick = (url: string) => {
     setModalUrl(url);
@@ -105,7 +106,7 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
       <div className="bg-[#181818] border-b border-yellow-400/20 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link 
-            to={`/${goBack}`}
+            to={`/${goBack}${location.search}`}
             className="flex items-center text-yellow-400 hover:text-yellow-300 transition-colors duration-200"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

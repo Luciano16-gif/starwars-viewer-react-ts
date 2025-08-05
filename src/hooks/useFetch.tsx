@@ -10,6 +10,7 @@ interface FetchState<T> {
 interface UseFetchOptions {
   skipCache?: boolean;
   cacheTTL?: number; // Custom TTL in milliseconds
+  keepPreviousData?: boolean; // Keep previous data while loading
 }
 
 const useFetch = <T,>(
@@ -19,8 +20,11 @@ const useFetch = <T,>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [previousData, setPreviousData] = useState<T | null>(null);
 
-  const { skipCache = false, cacheTTL } = options;
+  const { skipCache = false, cacheTTL, keepPreviousData = true } = options;
+
+  const nextPrev = keepPreviousData ? data : null;
 
   useEffect(() => {
     if (!url) {
@@ -29,39 +33,38 @@ const useFetch = <T,>(
       return;
     }
 
+    setLoading(true);
+    setPreviousData(nextPrev);
+    if (!keepPreviousData) setData(null);
+    setError(null);
+
     const controller = new AbortController();
     const signal = controller.signal;
 
     const fetchData = async () => {
-      // Check cache first (unless skipped)
       if (!skipCache) {
         const cachedData = cacheService.get<T>(url);
         if (cachedData !== null) {
           setData(cachedData);
+          setPreviousData(cachedData);
           setLoading(false);
           setError(null);
           return;
         }
       }
 
-      setLoading(true);
-
       try {
         const res = await fetch(url, { signal });
-        
         if (!res.ok) {
           throw new Error(`Error: ${res.status} ${res.statusText}`);
         }
-        
         const responseData: T = await res.json();
-        
-        // Cache the successful response
         if (!skipCache) {
           cacheService.set(url, responseData, cacheTTL);
         }
-        
         if (!signal.aborted) {
           setData(responseData);
+          setPreviousData(responseData);
           setLoading(false);
           setError(null);
         }
@@ -81,13 +84,11 @@ const useFetch = <T,>(
 
     fetchData();
 
-    // Cleanup: abort the fetch if the component unmounts or URL changes
     return () => {
       controller.abort();
     };
-  }, [url, skipCache, cacheTTL]);
-
-  return { data, loading, error };
+  }, [url, skipCache, cacheTTL, keepPreviousData, nextPrev]);
+  return { data: data ?? previousData, loading, error };
 };
 
 export default useFetch;
