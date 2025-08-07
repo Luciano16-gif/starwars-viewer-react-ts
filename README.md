@@ -2,7 +2,7 @@
 
 A production-ready web application showcasing advanced React development patterns and modern web standards. Features dynamic SEO generation, intelligent caching, and professional-grade architecture. Built with React, TypeScript, and enterprise-level optimization techniques.
 
-**[Live Demo](starwars-lightspeed-explorer.netlify.app)** | **Dynamic SEO** | **Performance Optimized**
+**[Live Demo](https://starwars-lightspeed-explorer.netlify.app)** | **Dynamic SEO** | **Performance Optimized**
 
 ## Enterprise Features
 
