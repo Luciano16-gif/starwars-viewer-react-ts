@@ -1,6 +1,6 @@
 import { fetchAndCache } from "../utils/fetchAndCache";
 import swapiService from "./swapi.service";
-import { ListItem, ListResponse, ItemResponse, EntityProperties } from "../types/api";
+import { ListResponse } from "../types/api";
 
 export default async function dataPreloader(): Promise<void> {
     const categories = ['people', 'planets', 'starships', 'films', 'vehicles', 'species'];

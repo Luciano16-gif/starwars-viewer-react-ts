@@ -91,7 +91,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ fields, category }) => {
       return limit; // Show full skeleton grid for initial load
     }
     return 0;
-  }, [loading, keepPreviousData, results.length, limit, showSkeletonsInsteadOfResults]);
+  }, [loading, results.length, limit, showSkeletonsInsteadOfResults]);
 
   if (error) {
     return (
