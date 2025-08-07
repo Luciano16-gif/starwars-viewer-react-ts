@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 
 // Import components that will be loaded immediately
@@ -28,35 +29,37 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <ErrorBoundary>
-    <BrowserRouter>
-      <Layout>
-        <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            
-            <Route path="/people" element={<People />} />
-            <Route path="/people/:id" element={<IndividualPeople />} />
+  <HelmetProvider>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Layout>
+          <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              
+              <Route path="/people" element={<People />} />
+              <Route path="/people/:id" element={<IndividualPeople />} />
 
-            <Route path="/planets" element={<Planets />} />
-            <Route path="/planets/:id" element={<IndividualPlanets />} />
-            
-            <Route path="/films" element={<Films />} />
-            <Route path="/films/:id" element={<IndividualFilms />} />
+              <Route path="/planets" element={<Planets />} />
+              <Route path="/planets/:id" element={<IndividualPlanets />} />
+              
+              <Route path="/films" element={<Films />} />
+              <Route path="/films/:id" element={<IndividualFilms />} />
 
-            <Route path="/starships" element={<Starships />} />
-            <Route path="/starships/:id" element={<IndividualStarships />} />
+              <Route path="/starships" element={<Starships />} />
+              <Route path="/starships/:id" element={<IndividualStarships />} />
 
-            <Route path="/vehicles" element={<Vehicles />} />
-            <Route path="/vehicles/:id" element={<IndividualVehicles />} />
+              <Route path="/vehicles" element={<Vehicles />} />
+              <Route path="/vehicles/:id" element={<IndividualVehicles />} />
 
-            <Route path="/species" element={<Species />} />
-            <Route path="/species/:id" element={<IndividualSpecies />} />
-            
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </Layout>
-    </BrowserRouter>
-  </ErrorBoundary>
+              <Route path="/species" element={<Species />} />
+              <Route path="/species/:id" element={<IndividualSpecies />} />
+              
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </Layout>
+      </BrowserRouter>
+    </ErrorBoundary>
+  </HelmetProvider>
 );

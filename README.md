@@ -53,14 +53,14 @@ A comprehensive web application that consumes the SWAPI (Star Wars API) to displ
 - **ErrorBoundary**: Catches JavaScript errors and displays user-friendly fallback UI
 - **Graceful Degradation**: Handles API failures and network issues smoothly
 
-## 🚀 Getting Started
+## Getting Started
 
 ```bash
 npm install
 npm start
 ```
 
-## 🎯 Performance Optimizations
+## Performance Optimizations
 
 - Batched API requests (default 5 concurrent) to prevent server overload
 - Specialized hooks for different data patterns

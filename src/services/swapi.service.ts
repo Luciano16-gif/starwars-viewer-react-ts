@@ -1,5 +1,5 @@
 class SWAPIService {
-    private readonly baseURL = 'https://www.swapi.tech/api';
+    private readonly baseURL = process.env.REACT_APP_API_BASE_URL || 'https://www.swapi.tech/api';
 
     getListUrl(resource: string, page: number = 1, limit: number = 10, search?: string): string {
         

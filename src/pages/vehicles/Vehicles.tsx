@@ -1,4 +1,6 @@
+import { Helmet } from "react-helmet-async";
 import ShowAll from "../../components/ApiConsumption/ShowAll";
+import { generateListSEO } from "../../utils/seo";
 
 export default function Vehicles() {
   const fields = [
@@ -9,8 +11,23 @@ export default function Vehicles() {
     { label: "Passengers", key: "passengers" },
   ];
 
-  return <ShowAll 
-    fields={fields} 
-    category="vehicles" 
-  />;
+  const seoData = generateListSEO('vehicles');
+
+  return (
+    <>
+      <Helmet>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta name="twitter:title" content={seoData.title} />
+        <meta name="twitter:description" content={seoData.description} />
+      </Helmet>
+      
+      <ShowAll 
+        fields={fields} 
+        category="vehicles" 
+      />
+    </>
+  );
 }

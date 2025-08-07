@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import cacheService from '../services/cache.service';
 
 export default function Home() {
@@ -25,6 +26,15 @@ export default function Home() {
 
     return (
         <div className="relative bg-[#181818] min-h-screen">
+            <Helmet>
+                <title>Star Wars Explorer | React Portfolio</title>
+                <meta name="description" content="Interactive Star Wars universe explorer built with React & TypeScript. Browse characters, planets, starships and more with advanced search and caching." />
+                <meta property="og:title" content="Star Wars Explorer | React Portfolio" />
+                <meta property="og:description" content="Interactive Star Wars universe explorer built with React & TypeScript" />
+                <meta name="twitter:title" content="Star Wars Explorer | React Portfolio" />
+                <meta name="twitter:description" content="Interactive Star Wars universe explorer built with React & TypeScript" />
+            </Helmet>
+            
             <header className="max-w-4xl mx-auto px-6 pt-20 pb-10 text-center">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-400">Star Wars Explorer</h1>
                 <p className="mt-4 text-yellow-100/80">

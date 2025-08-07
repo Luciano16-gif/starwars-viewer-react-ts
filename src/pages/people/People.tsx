@@ -1,4 +1,6 @@
+import { Helmet } from "react-helmet-async";
 import ShowAll from "../../components/ApiConsumption/ShowAll";
+import { generateListSEO } from "../../utils/seo";
 
 const People: React.FC = () => {
   const peopleFields = [
@@ -9,11 +11,24 @@ const People: React.FC = () => {
     { label: "Height (cm)", key: "height" },
   ];
 
+  const seoData = generateListSEO('people');
+
   return (
-    <ShowAll 
-      fields={peopleFields} 
-      category="people"
-    />
+    <>
+      <Helmet>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta name="twitter:title" content={seoData.title} />
+        <meta name="twitter:description" content={seoData.description} />
+      </Helmet>
+      
+      <ShowAll 
+        fields={peopleFields} 
+        category="people"
+      />
+    </>
   );
 };
 

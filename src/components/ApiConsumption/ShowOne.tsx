@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import useFetch from "../../hooks/useFetch";
 import { ArrayField } from "./ArrayField";
 import { GetName } from "./GetName";
 import { Link, useLocation } from "react-router-dom";
 import { ItemResponse, EntityProperties } from "../../types/api";
 import { DetailModal } from "./DetailModal";
+import { generateSEO } from "../../utils/seo";
 
 interface Field {
   label: string;
@@ -100,8 +102,20 @@ const ShowOne: React.FC<ShowOneProp> = ({ url, fields, goBack }) => {
       </div>
     );
   }
+
+  const seoData = generateSEO(goBack.toString(), properties);
+
   return (
     <div className="relative bg-[#181818] min-h-screen">
+      <Helmet>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta name="twitter:title" content={seoData.title} />
+        <meta name="twitter:description" content={seoData.description} />
+      </Helmet>
+      
       {/* Header with back button */}
       <div className="bg-[#181818] border-b border-yellow-400/20 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
