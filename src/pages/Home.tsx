@@ -25,38 +25,34 @@ export default function Home() {
 
     return (
         <div className="relative bg-[#181818] min-h-screen">
-            <header className="max-w-6xl mx-auto px-6 pt-16 pb-8 text-center">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-400">Explore the Star Wars Universe</h1>
-                <p className="mt-4 text-yellow-100/80 max-w-2xl mx-auto">Search and browse people, films, planets, starships, and species with fast, cached results.</p>
+            <header className="max-w-4xl mx-auto px-6 pt-20 pb-10 text-center">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-400">Star Wars Explorer</h1>
+                <p className="mt-4 text-yellow-100/80">
+                    This app lets anyone quickly look up Star Wars people, planets, films, starships, vehicles, and species. It fetches live data and 
+                    keeps recent results cached so pages load fast even on slow connections.
+                </p>
             </header>
 
-            <section className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                {[
-                    { title: 'People', link: '/people' },
-                    { title: 'Films', link: '/films' },
-                    { title: 'Planets', link: '/Planets' },
-                    { title: 'Starships', link: '/starships' },
-                    { title: 'Species', link: '/species' },
-                ].map(card => (
-                    <a key={card.title} href={card.link} className="block bg-[rgba(57,58,58,0.5)] outline outline-2 outline-yellow-400 rounded-lg p-6 hover:bg-[rgba(95,96,96,0.5)] transition-colors">
-                        <h3 className="text-2xl font-bold text-yellow-400">{card.title}</h3>
-                        <p className="text-white/90 mt-2">Explore {card.title.toLowerCase()} from the galaxy.</p>
-                    </a>
-                ))}
+            <section className="max-w-4xl mx-auto px-6">
+                <div className="bg-[rgba(57,58,58,0.5)] outline outline-2 outline-yellow-400 rounded-lg p-6">
+                    <h2 className="text-2xl font-bold text-yellow-400 mb-2">How to use</h2>
+                    <ul className="text-white/90 list-disc list-inside space-y-1">
+                        <li>Use the navigation bar to choose a section</li>
+                        <li>Search or browse the list to find what you need</li>
+                        <li>Open any item to see clear, organized details</li>
+                    </ul>
+                </div>
             </section>
 
-            <section className="max-w-6xl mx-auto px-6 mt-10 grid md:grid-cols-2 gap-6">
+            <section className="max-w-4xl mx-auto px-6 mt-8 grid md:grid-cols-2 gap-6">
                 <div className="bg-[rgba(57,58,58,0.5)] outline outline-2 outline-yellow-400 rounded-lg p-6">
-                    <h2 className="text-2xl font-bold text-yellow-400 mb-2">How it works</h2>
-                    <ol className="text-white/90 list-decimal list-inside space-y-1">
-                        <li>Use search to find items</li>
-                        <li>Browse lists and pages</li>
-                        <li>Open any item for details</li>
-                    </ol>
+                    <h2 className="text-2xl font-bold text-yellow-400 mb-2">What’s inside</h2>
+                    <p className="text-white/90">Clean pages for each category, quick search, and simple pagination so you can hop through the 
+                    galaxy without getting lost.</p>
                 </div>
                 <div className="bg-[rgba(57,58,58,0.5)] outline outline-2 outline-yellow-400 rounded-lg p-6">
-                    <h2 className="text-2xl font-bold text-yellow-400 mb-2">Performance</h2>
-                    <p className="text-white/90">Results are cached for speed. You can clear the cache below if needed.</p>
+                    <h2 className="text-2xl font-bold text-yellow-400 mb-2">Performance & privacy</h2>
+                    <p className="text-white/90">Very fast: cached results, client-side rendering, lightweight UI, incremental fetching. You can refresh or clear the cache anytime below.</p>
                     <div className="text-white space-y-1 mt-3 text-sm">
                         <p><span className="font-bold">Memory Entries:</span> {cacheStats.memoryEntries}</p>
                         <p><span className="font-bold">LocalStorage Entries:</span> {cacheStats.localStorageEntries}</p>
@@ -80,9 +76,8 @@ export default function Home() {
                 </div>
             </section>
 
-            <footer className="max-w-6xl mx-auto px-6 py-12 text-yellow-200/70 text-sm">
+            <footer className="max-w-6xl mx-auto px-6 py-12 text-yellow-200/70 text-sm text-center">
                 Data from swapi.tech • Built with React + TypeScript
             </footer>
         </div>
-    );
-}
+    );}

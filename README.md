@@ -4,12 +4,16 @@ A comprehensive web application that consumes the SWAPI (Star Wars API) to displ
 
 ## ✨ Features
 
-- **Complete SWAPI Coverage**: Browse people, planets, starships, and films
+- **Complete SWAPI Coverage**: Browse people, planets, starships, films, vehicles, and species
 - **Detailed Views**: Click on any item to see comprehensive information
 - **Smart Data Display**: 
   - Arrays show as formatted lists with names resolved from URLs
   - Related items display as clickable names instead of raw URLs
   - Efficient batched API calls for array data
+- **Error Handling**: Comprehensive error boundary catches and displays errors gracefully
+- **404 Page**: Custom not-found page with navigation options
+- **Search & Pagination**: Search functionality with pagination support across all categories
+- **Performance Optimized**: Lazy loading, caching, and preloading for fast user experience
 - **Responsive Design**: Works on desktop and mobile (mobile performance score: 88, desktop: 100)
 - **Limit Selector**: Choose how many items to display (reduces API calls)
 - **Space Theme**: Animated starry background with yellow accent colors
@@ -41,6 +45,13 @@ A comprehensive web application that consumes the SWAPI (Star Wars API) to displ
 - **Planets**: Planet directory with detailed views
 - **Starships**: Starship catalog and specifications
 - **Films**: Movie information and details
+- **Vehicles**: Vehicle directory with specifications
+- **Species**: Species catalog with characteristics
+- **404 NotFound**: Custom error page with navigation options
+
+### Error Handling
+- **ErrorBoundary**: Catches JavaScript errors and displays user-friendly fallback UI
+- **Graceful Degradation**: Handles API failures and network issues smoothly
 
 ## 🚀 Getting Started
 
