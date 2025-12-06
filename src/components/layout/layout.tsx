@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import HamburgerMenu from "../menus/HamburgerMenu";
-import TopMenu from "../menus/topMenu";
+import TopMenu from "../menus/TopMenu";
 import StarryBackground from "../ui/StarryBackground";
 import dataPreloader from "../../services/preloader.service";
 

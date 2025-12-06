@@ -4,13 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 
-// Import components that will be loaded immediately
 import Layout from './components/layout/layout';
 import Home from './pages/Home';
 import ErrorBoundary from './components/ErrorBoundary';
 import NotFound from './pages/NotFound';
 
-// doing lazy oading to improve performance on mobile
 const People = lazy(() => import('./pages/people/People'));
 const IndividualPeople = lazy(() => import('./pages/people/IndividualPeople'));
 const Planets = lazy(() => import('./pages/Planets/Planets'));
@@ -33,7 +31,7 @@ root.render(
     <ErrorBoundary>
       <BrowserRouter>
         <Layout>
-          <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
+          <Suspense fallback={null}>
             <Routes>
               <Route path="/" element={<Home />} />
               

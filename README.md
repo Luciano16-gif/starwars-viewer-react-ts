@@ -1,4 +1,4 @@
-# Star Wars Explorer | Enterprise-Grade React Application
+# Star Wars Explorer | Production-Ready React Application
 
 A production-ready web application showcasing advanced React development patterns and modern web standards. Features dynamic SEO generation, intelligent caching, and professional-grade architecture. Built with React, TypeScript, and enterprise-level optimization techniques.
 
@@ -26,7 +26,7 @@ A production-ready web application showcasing advanced React development pattern
 - **Loading states** with skeleton screens matching final structure
 
 ### **Complete SWAPI Integration**
-- **Seven content types**: People, planets, starships, films, vehicles, species
+- **Six content types**: People, planets, starships, films, vehicles, species
 - **Smart data relationships** - URLs auto-resolve to clickable names
 - **Search & pagination** across all categories
 - **Detailed individual pages** with comprehensive information
