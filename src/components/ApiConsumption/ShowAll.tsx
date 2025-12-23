@@ -4,6 +4,7 @@ import useFetch from "../../hooks/useFetch";
 import LimitSelector from "./LimitSelector";
 import Pagination from "./Pagination";
 import SearchBar from "./SearchBar";
+import SkeletonCard from "./SkeletonCard";
 import { ListResponse, ListItem as ListItemType } from "../../types/api";
 import swapiService from "../../services/swapi.service";
 
@@ -16,15 +17,6 @@ interface ShowAllProps {
   fields: Field[];
   category: string;
 }
-
-const SkeletonCard: React.FC<{ fields: Field[] }> = ({ fields }) => (
-  <div className="flex flex-col items-center outline outline-2 outline-yellow-400 bg-[rgba(57,58,58,0.5)] p-4 h-fit w-full rounded animate-pulse">
-    <div className="h-8 bg-yellow-400/20 rounded w-3/4 mb-2"></div>
-    {fields.map((_, fieldIndex) => (
-      <div key={fieldIndex} className="h-5 bg-gray-600/20 rounded w-full mb-1 mt-1"></div>
-    ))}
-  </div>
-);
 
 const ItemCard: React.FC<{ item: ListItemType; fields: Field[]; category: string; search: string }> = ({ 
   item, 
@@ -159,7 +151,7 @@ const ShowAll: React.FC<ShowAllProps> = ({ fields, category }) => {
         
         {/* Show skeletons for loading slots */}
         {Array(skeletonCount).fill(null).map((_, index) => (
-          <SkeletonCard key={`skeleton-${index}`} fields={fields} />
+          <SkeletonCard key={`skeleton-${index}`} lines={fields.length} />
         ))}
         
         {/* Show no results message */}

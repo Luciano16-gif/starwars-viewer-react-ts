@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 
 import Layout from './components/layout/layout';
+import RouteFallback from './components/ui/RouteFallback';
 import Home from './pages/Home';
 import ErrorBoundary from './components/ErrorBoundary';
 import NotFound from './pages/NotFound';
@@ -31,7 +32,7 @@ root.render(
     <ErrorBoundary>
       <BrowserRouter>
         <Layout>
-          <Suspense fallback={null}>
+          <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />
               
