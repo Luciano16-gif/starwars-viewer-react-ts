@@ -20,11 +20,8 @@ const useFetch = <T,>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [previousData, setPreviousData] = useState<T | null>(null);
 
   const { skipCache = false, cacheTTL, keepPreviousData = true } = options;
-
-  const nextPrev = keepPreviousData ? data : null;
 
   useEffect(() => {
     if (!url) {
@@ -34,7 +31,6 @@ const useFetch = <T,>(
     }
 
     setLoading(true);
-    setPreviousData(nextPrev);
     if (!keepPreviousData) setData(null);
     setError(null);
 
@@ -46,7 +42,6 @@ const useFetch = <T,>(
         const cachedData = cacheService.get<T>(url);
         if (cachedData !== null) {
           setData(cachedData);
-          setPreviousData(cachedData);
           setLoading(false);
           setError(null);
           return;
@@ -64,7 +59,6 @@ const useFetch = <T,>(
         }
         if (!signal.aborted) {
           setData(responseData);
-          setPreviousData(responseData);
           setLoading(false);
           setError(null);
         }
@@ -87,8 +81,8 @@ const useFetch = <T,>(
     return () => {
       controller.abort();
     };
-  }, [url, skipCache, cacheTTL, keepPreviousData, nextPrev]);
-  return { data: data ?? previousData, loading, error };
+  }, [url, skipCache, cacheTTL, keepPreviousData]);
+  return { data, loading, error };
 };
 
 export default useFetch;
