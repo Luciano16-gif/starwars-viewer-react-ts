@@ -18,11 +18,12 @@ export const fetchAndCache = async <T = any>(url: string, options: FetchAndCache
         }
       }
       const res = await fetch(url);
-      if (res.ok) {
-        data = await res.json();
+      if (!res.ok) {
+        throw new Error(`Error fetching ${url}: ${res.status} ${res.statusText}`);
+      }
+      data = await res.json();
       if (!skipCache) {
         cacheService.set(url, data, cacheTTL);
-        }
       }
     }
 

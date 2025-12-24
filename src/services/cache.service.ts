@@ -118,8 +118,17 @@ class CacheService {
     // Update localStorage
     try {
       const localStorageKey = this.CACHE_PREFIX + cacheKey;
+      const existingItem = localStorage.getItem(localStorageKey);
       const serialized = JSON.stringify(entry);
       const bytes = this.bytes(serialized);
+      if (bytes > this.MAX_CACHE_SIZE) {
+        console.warn('Cache entry exceeds max cache size, skipping:', url);
+        return;
+      }
+      const existingBytes = existingItem ? this.bytes(existingItem) : 0;
+      if (existingBytes) {
+        this.currentCacheSize = Math.max(0, this.currentCacheSize - existingBytes);
+      }
       
       // Check if we're approaching storage limit
       while (this.currentCacheSize + bytes > this.MAX_CACHE_SIZE) {
