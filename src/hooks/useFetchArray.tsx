@@ -7,6 +7,21 @@ interface UseFetchArrayOptions {
   cacheTTL?: number;
 }
 
+export interface ResolvedName {
+  url: string;
+  name: string | null;
+}
+
+type BatchUpdate = (batchItems: ResolvedName[], startIndex: number) => void;
+
+function getEntityName(response: ItemResponse<EntityProperties> | null): string | null {
+  if (!response) return null;
+  const properties = response?.result?.properties;
+  if (properties && 'name' in properties) return properties.name;
+  if (properties && 'title' in properties) return (properties as any).title;
+  return null;
+}
+
 // Cache individual URL responses to avoid re-fetching
 async function fetchWithCache(
   url: string, 
@@ -50,9 +65,10 @@ export async function fetchArray(
   urls: string[], 
   batchSize: number = 5, 
   abortSignal?: AbortSignal,
-  options: UseFetchArrayOptions = {}
-): Promise<string[]> {
-  const names: string[] = [];
+  options: UseFetchArrayOptions = {},
+  onBatch?: BatchUpdate
+): Promise<ResolvedName[]> {
+  const items: ResolvedName[] = [];
   
   for (let i = 0; i < urls.length; i += batchSize) {
     if (abortSignal?.aborted) {
@@ -66,20 +82,16 @@ export async function fetchArray(
     
     const batchResponses = await Promise.all(batchPromises);
 
-    names.push(
-      ...batchResponses
-        .filter((response): response is ItemResponse<EntityProperties> => response !== null)
-        .map((response) => {
-          const properties = response?.result?.properties;
-          return properties && 'name' in properties ? properties.name : 
-                 properties && 'title' in properties ? (properties as any).title : 
-                 null;
-        })
-        .filter((name): name is string => name !== null)
-    );
+    const batchItems = batchResponses.map((response, index) => ({
+      url: batchUrls[index],
+      name: getEntityName(response)
+    }));
+
+    items.push(...batchItems);
+    onBatch?.(batchItems, i);
   }
   
-  return names;
+  return items;
 }
 
 export function useFetchArray(
@@ -87,7 +99,7 @@ export function useFetchArray(
   autoFetch: boolean = true,
   options: UseFetchArrayOptions = {}
 ) {
-  const [names, setNames] = useState<string[]>([]);
+  const [items, setItems] = useState<ResolvedName[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -96,21 +108,41 @@ export function useFetchArray(
 
   useEffect(() => {
     if (!autoFetch || urls.length === 0) {
-      setNames([]);
+      setItems([]);
+      setLoading(false);
+      setError(null);
       return;
     }
 
     const abortController = new AbortController();
 
     const fetchNames = async () => {
+      const initialItems: ResolvedName[] = urls.map((url) => ({ url, name: null }));
+      let currentItems = initialItems;
+
       setLoading(true);
       setError(null);
+      setItems(initialItems);
       
       try {
+        const handleBatchUpdate: BatchUpdate = (batchItems, startIndex) => {
+          if (abortController.signal.aborted) return;
+          batchItems.forEach((item, index) => {
+            currentItems[startIndex + index] = item;
+          });
+          setItems([...currentItems]);
+        };
+
         // Use destructured values instead of options object
-        const result = await fetchArray(urls, 5, abortController.signal, { skipCache, cacheTTL });
+        const result = await fetchArray(
+          urls, 
+          5, 
+          abortController.signal, 
+          { skipCache, cacheTTL },
+          handleBatchUpdate
+        );
         if (!abortController.signal.aborted) {
-          setNames(result);
+          setItems(result);
         }
       } catch (err) {
         if (!abortController.signal.aborted) {
@@ -132,5 +164,5 @@ export function useFetchArray(
     };
   }, [urls, autoFetch, skipCache, cacheTTL]);
 
-  return { names, loading, error };
+  return { items, loading, error };
 }

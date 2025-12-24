@@ -1,5 +1,5 @@
 import useFetch from "../../hooks/useFetch";
-import { ApiObject } from "../../types/api";
+import { ApiObject, ApiObjectMovie } from "../../types/api";
 
 interface GetNameProp {
     url: string;
@@ -11,7 +11,9 @@ export const GetName: React.FC<GetNameProp> = ({ url, label, onDetailClick }) =>
     const isNullUrl = typeof url === 'string' && /(?:^|\/)null\/?$/.test(url);
     const safeUrl = isNullUrl ? '' : url;
     const { data, loading, error } = useFetch(safeUrl);
-    const name: string = (data as ApiObject)?.result?.properties?.name;
+    const name: string =
+      (data as ApiObject)?.result?.properties?.name ||
+      (data as ApiObjectMovie)?.result?.properties?.title;
     if (loading) return (
       <div className="h-6 bg-gray-600/20 rounded animate-pulse w-32"></div>
   );

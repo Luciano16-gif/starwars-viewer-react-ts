@@ -72,3 +72,12 @@ export interface ApiObject {
     }
     name: string
 }
+
+export interface ApiObjectMovie {
+    result: {
+        properties: {
+            title: string;
+        }
+    }
+    title: string
+}
