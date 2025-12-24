@@ -28,6 +28,9 @@ function getDisplayName(properties: EntityProperties): string {
   return 'Unknown';
 }
 
+let openModalCount = 0;
+let previousBodyOverflow: string | null = null;
+
 export const DetailModal: React.FC<DetailModalProps> = ({ url, onClose }) => {
   const { data, error, loading } = useFetch<ItemResponse<EntityProperties>>(url || '');
   const [nestedModalUrl, setNestedModalUrl] = useState<string | null>(null);
@@ -41,14 +44,20 @@ export const DetailModal: React.FC<DetailModalProps> = ({ url, onClose }) => {
   };
 
   useEffect(() => {
-    if (url) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+    if (!url) return;
+
+    if (openModalCount === 0) {
+      previousBodyOverflow = document.body.style.overflow;
     }
-    
+    openModalCount += 1;
+    document.body.style.overflow = 'hidden';
+
     return () => {
-      document.body.style.overflow = 'unset';
+      openModalCount = Math.max(0, openModalCount - 1);
+      if (openModalCount === 0) {
+        document.body.style.overflow = previousBodyOverflow ?? '';
+        previousBodyOverflow = null;
+      }
     };
   }, [url]);
 
