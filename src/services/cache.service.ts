@@ -7,8 +7,8 @@ interface CacheEntry<T> {
 class CacheService {
     private memoryCache: Map<string, CacheEntry<any>> = new Map();
     private readonly CACHE_PREFIX = 'swapi_cache_';
-    private readonly DEFAULT_TTL = parseInt(process.env.REACT_APP_CACHE_TTL || '300000'); // Default 5 minutes in milliseconds
-    private readonly MAX_CACHE_SIZE = parseInt(process.env.REACT_APP_MAX_CACHE_SIZE || '2097152'); // Default 2 MB
+    private readonly DEFAULT_TTL = parseInt(import.meta.env.VITE_CACHE_TTL || '300000'); // Default 5 minutes in milliseconds
+    private readonly MAX_CACHE_SIZE = parseInt(import.meta.env.VITE_MAX_CACHE_SIZE || '2097152'); // Default 2 MB
     private bytes(str: string): number { return str.length * 2; }
     private currentCacheSize: number = 0; 
 
