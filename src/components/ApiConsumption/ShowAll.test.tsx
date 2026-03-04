@@ -69,21 +69,33 @@ describe('ShowAll integration', () => {
   });
 
   it('applies debounced search and resets page to 1', async () => {
-    vi.useFakeTimers();
     renderShowAll('/people?page=3&limit=10');
 
     fireEvent.change(screen.getByPlaceholderText('Search people...'), {
       target: { value: 'Luke' },
     });
 
-    act(() => {
-      vi.advanceTimersByTime(350);
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400));
     });
 
     await waitFor(() => {
       const search = screen.getByTestId('location-search').textContent || '';
       expect(search).toContain('q=Luke');
       expect(search).toContain('page=1');
+    }, { timeout: 2000 });
+  });
+
+  it('normalizes invalid page and limit query params', async () => {
+    renderShowAll('/people?page=abc&limit=0');
+
+    await waitFor(() => {
+      const search = screen.getByTestId('location-search').textContent || '';
+      expect(search).toContain('page=1');
+      expect(search).toContain('limit=9');
     });
+
+    expect(screen.getByRole('combobox')).toHaveValue('9');
+    expect(screen.getByText('1 / 3')).toBeInTheDocument();
   });
 });

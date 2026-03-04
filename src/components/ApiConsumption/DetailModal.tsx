@@ -72,8 +72,8 @@ export const DetailModal: React.FC<DetailModalProps> = ({ url, onClose }) => {
   const properties = data?.result?.properties;
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+    <div
+      className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 pt-20 md:pt-4"
       onClick={handleBackdropClick}
     >
       <div className="bg-[#181818] rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto border border-yellow-400/30">
@@ -82,7 +82,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ url, onClose }) => {
           <h2 className="text-2xl font-bold text-yellow-400">
             {loading ? 'Loading...' : properties ? getDisplayName(properties) : 'Details'}
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="text-yellow-400 hover:text-yellow-300 transition-colors"
           >
@@ -123,7 +123,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ url, onClose }) => {
                     <h3 className="text-lg font-semibold text-yellow-400 mb-2 capitalize">
                       {key.replace(/_/g, ' ')}
                     </h3>
-                    
+
                     {Array.isArray(value) ? (
                       value.every(item => isUrl(item)) ? (
                         <div className="pl-0">

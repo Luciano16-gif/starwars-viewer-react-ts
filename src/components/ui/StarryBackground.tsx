@@ -4,7 +4,7 @@ const StarryBackground = () => {
   // Generate random stars - memoized to prevent re-rendering
   const stars = useMemo(() => {
     const isMobile = window.innerWidth < 768;
-    const starCount = isMobile ? 50 : 200; 
+    const starCount = isMobile ? 50 : 200;
     return Array.from({ length: starCount }, (_, i) => {
       return {
         id: i,

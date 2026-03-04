@@ -45,8 +45,8 @@ class CacheService {
   }
 
   private getCacheKey(url: string): string {
-    // Create a normalized cache key from URL
-    return url.replace(/[^a-zA-Z0-9]/g, '_');
+    // Preserve URL uniqueness while keeping localStorage-safe keys.
+    return encodeURIComponent(url);
   }
 
   private isExpired(entry: CacheEntry<any>): boolean {
@@ -90,8 +90,11 @@ class CacheService {
     }
   }
 
-  private evictRandomEntry(): void {
+  private evictRandomEntry(): boolean {
     const keys = Array.from(this.memoryCache.keys());
+    if (keys.length === 0) {
+      return false;
+    }
     const victimKey = keys[Math.floor(Math.random() * keys.length)];
     const localStorageKey = this.CACHE_PREFIX + victimKey;
     const item = localStorage.getItem(localStorageKey);
@@ -102,6 +105,8 @@ class CacheService {
     if (item) {
       this.currentCacheSize -= this.bytes(item);
     }
+
+    return true;
   }
 
   set<T>(url: string, data: T, ttl?: number): void {
@@ -111,20 +116,17 @@ class CacheService {
       timestamp: Date.now(),
       ttl: ttl || this.DEFAULT_TTL
     };
-
-    // Update memory cache
-    this.memoryCache.set(cacheKey, entry);
+    const serialized = JSON.stringify(entry);
+    const bytes = this.bytes(serialized);
+    if (bytes > this.MAX_CACHE_SIZE) {
+      console.warn('Cache entry exceeds max cache size, skipping:', url);
+      return;
+    }
 
     // Update localStorage
     try {
       const localStorageKey = this.CACHE_PREFIX + cacheKey;
       const existingItem = localStorage.getItem(localStorageKey);
-      const serialized = JSON.stringify(entry);
-      const bytes = this.bytes(serialized);
-      if (bytes > this.MAX_CACHE_SIZE) {
-        console.warn('Cache entry exceeds max cache size, skipping:', url);
-        return;
-      }
       const existingBytes = existingItem ? this.bytes(existingItem) : 0;
       if (existingBytes) {
         this.currentCacheSize = Math.max(0, this.currentCacheSize - existingBytes);
@@ -132,7 +134,10 @@ class CacheService {
       
       // Check if we're approaching storage limit
       while (this.currentCacheSize + bytes > this.MAX_CACHE_SIZE) {
-        this.evictRandomEntry();
+        if (!this.evictRandomEntry()) {
+          console.warn('Cache is full and no entries are available for eviction, skipping:', url);
+          return;
+        }
       }
 
       localStorage.setItem(localStorageKey, serialized);
@@ -140,14 +145,16 @@ class CacheService {
     } catch (error) {
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
         console.warn('localStorage quota exceeded, clearing old entries');
-        this.evictRandomEntry();
+        if (!this.evictRandomEntry()) {
+          console.warn('Quota exceeded and no entries are available for eviction, skipping:', url);
+          return;
+        }
         
         // Try again
         try {
           const retryKey = this.CACHE_PREFIX + cacheKey;
-          const retrySerialized = JSON.stringify(entry);
-          localStorage.setItem(retryKey, retrySerialized);
-          this.currentCacheSize += this.bytes(retrySerialized);
+          localStorage.setItem(retryKey, serialized);
+          this.currentCacheSize += bytes;
         } catch (retryError) {
           console.error('Failed to cache after cleanup:', retryError);
         }
@@ -155,6 +162,9 @@ class CacheService {
         console.error('Error setting cache:', error);
       }
     }
+
+    // Keep memory cache in sync regardless of localStorage support.
+    this.memoryCache.set(cacheKey, entry);
   }
 
   get<T>(url: string): T | null {

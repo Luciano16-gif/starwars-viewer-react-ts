@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 const HamburgerMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   interface MenuItem {
     href: string;
@@ -19,6 +20,11 @@ const HamburgerMenu: React.FC = () => {
     { href: "/species", label: "Species" },
   ];
 
+  const isActive = (href: string) => {
+    if (href === "/") return location.pathname === "/";
+    return location.pathname.startsWith(href);
+  };
+
   function toggleMenu() {
     setIsOpen(!isOpen);
   }
@@ -29,7 +35,7 @@ const HamburgerMenu: React.FC = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-40 md:hidden lg:hidden">
-      <div className="absolute top-0 left-0 right-0 border-b-2 border-yellow-500 h-16 flex items-center px-4 z-50">
+      <div className="absolute top-0 left-0 right-0 border-b-2 border-yellow-500/80 h-16 flex items-center px-4 z-50 bg-black/95 backdrop-blur-sm">
         <div className="relative w-10 h-10">
 
           {/* Hamburger icon */}
@@ -58,32 +64,34 @@ const HamburgerMenu: React.FC = () => {
           </button>
         </div>
 
-        
+
         <h2 className="text-2xl font-bold text-yellow-400 absolute left-1/2 transform -translate-x-1/2">
           Star Wars
         </h2>
       </div>
       <div
-        className={`fixed inset-0 bg-black/95 transition-all duration-300 ease-in-out z-40 ${
-          isOpen 
-            ? "opacity-100 scale-100" 
+        className={`fixed inset-0 bg-black/95 backdrop-blur-sm transition-all duration-300 ease-in-out z-40 ${isOpen
+            ? "opacity-100 scale-100"
             : "opacity-0 scale-95 pointer-events-none"
-        }`}
+          }`}
         onClick={handleLinkClick}
       >
         <ul className="flex flex-col items-center justify-center h-screen pt-16">
           {menuItems.map((item, index) => (
-            <li key={item.href} className="hover:scale-110 transform transition-all duration-300">
+            <li key={item.href}>
               <Link
-                className="text-yellow-400 hover:text-yellow-300 text-xl uppercase tracking-wider font-semibold py-4 px-4 w-full inline-block
-                          transform transition-all duration-300 hover:scale-110
-                          hover:bg-yellow-500/10"
+                className={`text-xl uppercase tracking-wider font-semibold py-4 px-6 w-full inline-block
+                          transform transition-all duration-300
+                          ${isActive(item.href)
+                    ? "text-yellow-300 bg-yellow-500/10"
+                    : "text-yellow-400/70 hover:text-yellow-400 hover:bg-yellow-500/5"
+                  }`}
                 to={item.href}
               >
                 {item.label}
               </Link>
               {index < menuItems.length - 1 && (
-                <div className="w-24 h-px bg-yellow-500/30 mx-auto" />
+                <div className="w-24 h-px bg-yellow-500/20 mx-auto" />
               )}
             </li>
           ))}

@@ -7,3 +7,26 @@ html, body, #root {
   background-color: #181818;
   min-height: 100%;
 }
+
+/* Minimal scrollbar that blends with the dark theme */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(234, 179, 8, 0.15) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(234, 179, 8, 0.15);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 179, 8, 0.3);
+}

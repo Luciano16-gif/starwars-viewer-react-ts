@@ -39,4 +39,47 @@ describe('cacheService', () => {
 
     expect(cacheService.get(url)).toBeNull();
   });
+
+  it('keeps distinct entries for similar URLs', () => {
+    const dashed = 'https://api.test/people?name=luke-skywalker';
+    const underscored = 'https://api.test/people?name=luke_skywalker';
+    const dashedPayload = { name: 'Luke dashed' };
+    const underscoredPayload = { name: 'Luke underscored' };
+
+    cacheService.set(dashed, dashedPayload);
+    cacheService.set(underscored, underscoredPayload);
+
+    expect(cacheService.get(dashed)).toEqual(dashedPayload);
+    expect(cacheService.get(underscored)).toEqual(underscoredPayload);
+  });
+
+  it('does not cache entries larger than max cache size in memory or localStorage', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const url = 'https://api.test/huge';
+    const hugePayload = { value: 'x'.repeat(1_100_000) };
+
+    cacheService.set(url, hugePayload);
+
+    expect(cacheService.get(url)).toBeNull();
+    expect(warnSpy).toHaveBeenCalledWith('Cache entry exceeds max cache size, skipping:', url);
+    warnSpy.mockRestore();
+  });
+
+  it('skips caching when at limit and no entry is available to evict', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const service = cacheService as any;
+
+    service.currentCacheSize = service.MAX_CACHE_SIZE;
+    service.memoryCache.clear();
+    localStorage.clear();
+
+    cacheService.set('https://api.test/no-space', { name: 'No Space' });
+
+    expect(cacheService.get('https://api.test/no-space')).toBeNull();
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Cache is full and no entries are available for eviction, skipping:',
+      'https://api.test/no-space'
+    );
+    warnSpy.mockRestore();
+  });
 });

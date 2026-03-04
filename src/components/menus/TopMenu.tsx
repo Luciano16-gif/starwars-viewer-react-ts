@@ -18,7 +18,7 @@ const TopMenu: React.FC = () => {
   ];
 
   return (
-    <nav 
+    <nav
       className="
         hidden
         bg-black 
@@ -37,11 +37,11 @@ const TopMenu: React.FC = () => {
       "
     >
       <ul className="flex flex-row space-x-6 uppercase font-semibold tracking-wider sm:space-x-8 sm:text-lg">
-            {menuItems.map((item) => (
-            <li key={item.href} className="hover:scale-110 transform transition-all duration-300">
-                <Link to={item.href}>{item.label}</Link>
-            </li>
-            ))}
+        {menuItems.map((item) => (
+          <li key={item.href} className="hover:scale-110 transform transition-all duration-300">
+            <Link to={item.href}>{item.label}</Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );

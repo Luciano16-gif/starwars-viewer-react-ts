@@ -24,7 +24,7 @@ function getEntityName(response: ItemResponse<EntityProperties> | null): string 
 
 // Cache individual URL responses to avoid re-fetching
 async function fetchWithCache(
-  url: string, 
+  url: string,
   abortSignal?: AbortSignal,
   options: UseFetchArrayOptions = {}
 ): Promise<ItemResponse<EntityProperties> | null> {
@@ -40,15 +40,15 @@ async function fetchWithCache(
 
   try {
     const response = await fetch(url, { signal: abortSignal });
-    
+
     if (response.ok) {
       const data: ItemResponse<EntityProperties> = await response.json();
-      
+
       // Cache the response
       if (!skipCache) {
         cacheService.set(url, data, cacheTTL);
       }
-      
+
       return data;
     } else {
       throw new Error(`Error fetching ${url}: ${response.status} ${response.statusText}`);
@@ -62,24 +62,24 @@ async function fetchWithCache(
 }
 
 export async function fetchArray(
-  urls: string[], 
-  batchSize: number = 5, 
+  urls: string[],
+  batchSize: number = 5,
   abortSignal?: AbortSignal,
   options: UseFetchArrayOptions = {},
   onBatch?: BatchUpdate
 ): Promise<ResolvedName[]> {
   const items: ResolvedName[] = [];
-  
+
   for (let i = 0; i < urls.length; i += batchSize) {
     if (abortSignal?.aborted) {
       throw new Error('Fetch Aborted');
     }
 
     const batchUrls = urls.slice(i, i + batchSize);
-    const batchPromises = batchUrls.map(url => 
+    const batchPromises = batchUrls.map(url =>
       fetchWithCache(url, abortSignal, options)
     );
-    
+
     const batchResponses = await Promise.all(batchPromises);
 
     const batchItems = batchResponses.map((response, index) => ({
@@ -90,12 +90,12 @@ export async function fetchArray(
     items.push(...batchItems);
     onBatch?.(batchItems, i);
   }
-  
+
   return items;
 }
 
 export function useFetchArray(
-  urls: string[], 
+  urls: string[],
   autoFetch: boolean = true,
   options: UseFetchArrayOptions = {}
 ) {
@@ -105,6 +105,10 @@ export function useFetchArray(
 
   // Destructure options to avoid object reference issues
   const { skipCache = false, cacheTTL } = options;
+
+  // Serialize urls to a string key so we only re-fetch when the actual URLs change,
+  // not when the parent recreates the array with the same content
+  const urlsKey = JSON.stringify(urls);
 
   useEffect(() => {
     if (!autoFetch || urls.length === 0) {
@@ -123,7 +127,7 @@ export function useFetchArray(
       setLoading(true);
       setError(null);
       setItems(initialItems);
-      
+
       try {
         const handleBatchUpdate: BatchUpdate = (batchItems, startIndex) => {
           if (abortController.signal.aborted) return;
@@ -135,9 +139,9 @@ export function useFetchArray(
 
         // Use destructured values instead of options object
         const result = await fetchArray(
-          urls, 
-          5, 
-          abortController.signal, 
+          urls,
+          5,
+          abortController.signal,
           { skipCache, cacheTTL },
           handleBatchUpdate
         );
@@ -162,7 +166,7 @@ export function useFetchArray(
     return () => {
       abortController.abort();
     };
-  }, [urls, autoFetch, skipCache, cacheTTL]);
+  }, [urlsKey, autoFetch, skipCache, cacheTTL]);
 
   return { items, loading, error };
 }

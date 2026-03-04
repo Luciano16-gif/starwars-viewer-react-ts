@@ -89,7 +89,7 @@ describe('useFetch', () => {
     const firstPayload = { result: { properties: { name: 'Han' } } };
     const secondPayload = { result: { properties: { name: 'Chewbacca' } } };
 
-    let resolveSecond: ((value: Response) => void) | null = null;
+    let resolveSecond!: (value: Response) => void;
     const secondResponse = new Promise<Response>((resolve) => {
       resolveSecond = resolve;
     });
@@ -111,7 +111,7 @@ describe('useFetch', () => {
     await waitFor(() => expect(result.current.loading).toBe(true));
     expect(result.current.data).toBeNull();
 
-    resolveSecond?.(mockResponse(secondPayload));
+    resolveSecond(mockResponse(secondPayload));
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.data).toEqual(secondPayload);
   });

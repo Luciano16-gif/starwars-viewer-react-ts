@@ -16,18 +16,23 @@ const normalizePath = (path: string) => (
 
 const ListFallback = () => (
   <div className="relative bg-[#181818] min-h-screen">
-    <div className="px-4 py-4">
-      <div className="max-w-6xl mx-auto flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <div className="order-2 sm:order-1 h-10 w-28 rounded bg-yellow-400/20 animate-pulse"></div>
-        <div className="order-1 sm:order-2 flex-1 h-10 rounded bg-gray-600/20 animate-pulse"></div>
-        <div className="order-3 hidden sm:block h-4 w-28 rounded bg-gray-600/20 animate-pulse"></div>
+    {/* Toolbar skeleton */}
+    <div className="max-w-6xl mx-auto px-6 pt-8 pb-6">
+      <div className="bg-[rgba(57,58,58,0.3)] rounded-lg p-4 border-2 border-yellow-400/10">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <div className="flex-1 h-10 rounded-lg bg-[rgba(30,30,30,0.5)] animate-pulse"></div>
+          <div className="h-10 w-20 rounded-lg bg-[rgba(30,30,30,0.5)] animate-pulse"></div>
+        </div>
       </div>
     </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center p-4 text-white">
-      {Array.from({ length: 9 }).map((_, index) => (
-        <SkeletonCard key={`skeleton-${index}`} lines={5} />
-      ))}
+    {/* Grid skeleton */}
+    <div className="max-w-6xl mx-auto px-6 pb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-white">
+        {Array.from({ length: 9 }).map((_, index) => (
+          <SkeletonCard key={`skeleton-${index}`} lines={5} />
+        ))}
+      </div>
     </div>
   </div>
 );

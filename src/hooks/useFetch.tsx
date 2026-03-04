@@ -64,9 +64,7 @@ const useFetch = <T,>(
         }
       } catch (err) {
         if (err instanceof Error) {
-          if (err.name === 'AbortError') {
-            console.log('Fetch aborted');
-          } else {
+          if (err.name !== 'AbortError') {
             if (!signal.aborted) {
               setLoading(false);
               setError(err.message || 'Unknown Error');
